@@ -20,5 +20,5 @@ class Proveedor_producto(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     costo_compra:Mapped[Decimal] =  mapped_column(Numeric(12, 2), nullable=False)
-    producto_id: Mapped[int] = mapped_column(Integer, ForeignKey("producto.id"), nullable=False, unique=)
+    producto_id: Mapped[int] = mapped_column(Integer, ForeignKey("producto.id"), nullable=False)
     proveedor_id: Mapped[int] = mapped_column(Integer, ForeignKey("proveedor.id"), nullable=False)
