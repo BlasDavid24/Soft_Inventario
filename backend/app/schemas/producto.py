@@ -2,7 +2,7 @@ from decimal import Decimal
 from datetime import datetime
 from pydantic import BaseModel
 
-#Plantilla para traer la información
+#Esquema para validar los datos al consultar un producto
 class ProductoResponse(BaseModel):
     id: int
     nombre: str
@@ -16,7 +16,7 @@ class ProductoResponse(BaseModel):
     fecha_act: datetime
     categoria_id: int
 
-#Plantilla para enviar la información
+#Esquema para validar los datos al crear un producto
 class ProductoCreate(BaseModel):
     nombre: str
     sku: str
@@ -26,6 +26,7 @@ class ProductoCreate(BaseModel):
     stock_minimo: Decimal
     categoria_id: int
 
+#Esquema para validar los datos al actualizar un producto
 class ProductoUpdate(BaseModel):
     nombre: str | None = None
     sku: str | None = None
