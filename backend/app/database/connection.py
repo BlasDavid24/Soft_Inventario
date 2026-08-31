@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 import os
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # Obtenemos los datos necesarios para conectarnos a PostgreSQL
