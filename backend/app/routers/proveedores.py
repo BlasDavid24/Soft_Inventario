@@ -10,7 +10,7 @@ router = APIRouter()
 
 #GET solicitar/obtener un recurso
 @router.get("/proveedores", response_model=list[ProveedorResponse])
-def obtener_Proveedor(db = Depends(get_db)):
+def obtener_proveedores(db = Depends(get_db)):
 
     consulta = select(Proveedor)
     resultado = db.execute(consulta)
@@ -49,22 +49,20 @@ def crear_proveedor(
     resultado = db.execute(consulta)
     datos_existentes = resultado.scalars().all()
 
+    errores = []
 
     for dato_existente in datos_existentes:
 
-        if dato_existente.rut == proveedor_data.rut and dato_existente.email == proveedor_data.email:
-            dato = f"El rut {proveedor_data.rut} y el email {proveedor_data.email} ya existen"
+        if dato_existente.rut == proveedor_data.rut:
+            errores.append(f"El rut {proveedor_data.rut} ya existe")
 
-        elif dato_existente.email == proveedor_data.email:
-            dato = f"El email {proveedor_data.email} ya existe"
-            
+        if dato_existente.email == proveedor_data.email:
+            errores.append(f"El email {proveedor_data.email} ya existe")
 
-        elif dato_existente.rut == proveedor_data.rut:
-            dato = f"El rut {proveedor_data.rut} ya existe"
-
+    if errores:
         raise HTTPException(
-            status_code=409,
-            detail=dato
+        status_code=409,
+        detail=errores
     )
 
 
