@@ -93,27 +93,3 @@ def actualizar_categoria(categoria_id: int, categoria_data: CategoriaUpdate, db 
     except Exception:
         db.rollback()
         raise
-
-#DELETE sirve para eliminar un recurso
-@router.delete("/categorias/{categoria_id}")
-def eliminar_categoria(
-        categoria_id: int,
-        db = Depends(get_db)
-    ):
-
-    consulta = select(Categoria).where(Categoria.id == categoria_id)
-    resultado = db.execute(consulta)
-    categoria = resultado.scalar_one_or_none()
-
-    if categoria is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Categoria no encontrada"
-        )
-    try:
-        db.delete(categoria)
-        db.commit()
-        return {"detail": "Categoria eliminada correctamente"}
-    except Exception:
-        db.rollback()
-        raise

@@ -18,5 +18,15 @@ class UsuarioCreate(BaseModel):
     password: str
     username: str
     rol: str
-    activo: bool  
     email: str
+
+class UsuarioUpdate(BaseModel):
+    nombre: str | None = None
+    apellido: str | None = None
+    rut: str | None = None
+    username: str | None = None
+    rol: str | None = None
+    email: str | None = None
+
+class UsuarioActivo(BaseModel):
+    activo: bool | None = None

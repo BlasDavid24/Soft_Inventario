@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException
 from app.database.connection import get_db
 from sqlalchemy import select
 from app.models.producto import Producto
-from app.schemas.producto import ProductoCreate, ProductoResponse, ProductoUpdate
+from app.schemas.producto import ProductoCreate, ProductoResponse, ProductoUpdate, ProductoActivo
 from fastapi import APIRouter
 
 
@@ -100,10 +100,10 @@ def actualizar_producto(producto_id: int, producto_data: ProductoUpdate, db = De
         db.rollback()
         raise
 
-#DELETE sirve para eliminar un recurso
-@router.delete("/productos/{producto_id}")
-def eliminar_producto(
-        producto_id: int,
+#PATCH sirve para actualizar parcialmente un recurso
+@router.patch("/productos/{producto_id}", response_model=ProductoResponse)
+def activar_desactivar_producto(
+        producto_id: int, producto_data: ProductoActivo,
         db=Depends(get_db)
     ):
 
@@ -116,10 +116,16 @@ def eliminar_producto(
             status_code=404,
             detail="Producto no encontrado"
         )
+
+    producto.activo = producto_data.activo
+
+    
     try:
-        db.delete(producto)
         db.commit()
-        return {"detail": "Producto eliminado correctamente"}
+        db.refresh(producto)
+    
+        return producto
+    
     except Exception:
         db.rollback()
         raise

@@ -2,8 +2,9 @@ from fastapi import Depends, HTTPException
 from app.database.connection import get_db
 from sqlalchemy import select, or_
 from app.models.usuario import Usuario
-from app.schemas.usuario import UsuarioResponse, UsuarioCreate
+from app.schemas.usuario import UsuarioResponse, UsuarioCreate, UsuarioUpdate, UsuarioActivo
 from fastapi import APIRouter
+from app.security.password import hash_password
 
 router = APIRouter()
 
@@ -72,10 +73,9 @@ def crear_usuario(
         nombre=usuario_data.nombre,
         apellido=usuario_data.apellido,
         rut=usuario_data.rut,
-        password_has=usuario_data.password_hash,
+        password_hash=hash_password(usuario_data.password),
         username=usuario_data.username,
         rol=usuario_data.rol,
-        activo=usuario_data.activo,
         email=usuario_data.email
     )
 
@@ -86,6 +86,63 @@ def crear_usuario(
         
         return usuario
 
+    except Exception:
+        db.rollback()
+        raise
+
+#PUT actualizar un recurso
+@router.put("/usuarios/{usuario_id}", response_model=UsuarioResponse)
+def actualizar_usuario(usuario_id: int, usuario_data: UsuarioUpdate , db = Depends(get_db)):
+    consulta = select(Usuario).where(Usuario.id == usuario_id)
+    resultado = db.execute(consulta)
+    usuario = resultado.scalar_one_or_none()
+
+    if usuario is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Usuario no encontrado"
+            )
+    
+    datos_actualizados = usuario_data.model_dump(exclude_unset=True)
+    for campo, valor in datos_actualizados.items():
+        setattr(usuario, campo, valor)
+
+    try:
+        db.commit()
+        db.refresh(usuario)
+
+        return usuario
+
+    except Exception:
+        db.rollback()
+        raise
+
+#PATCH sirve para actualizar parcialmente un recurso
+@router.patch("/usuarios/{usuario_id}", response_model=UsuarioResponse)
+def activar_desactivar_usuario(
+        usuario_id: int, usuario_data: UsuarioActivo,
+        db=Depends(get_db)
+    ):
+
+    consulta = select(Usuario).where(Usuario.id == usuario_id)
+    resultado = db.execute(consulta)
+    usuario = resultado.scalar_one_or_none()
+
+    if usuario is None:
+        raise HTTPException(
+            status_code=404,
+            detail="usuario no encontrado"
+        )
+
+    usuario.activo = usuario_data.activo
+
+    
+    try:
+        db.commit()
+        db.refresh(usuario)
+    
+        return usuario
+    
     except Exception:
         db.rollback()
         raise

@@ -26,3 +26,6 @@ class ProveedorUpdate(BaseModel):
     telefono: str | None = None
     direccion: str | None = None
     activo: bool | None = None
+
+class ProveedorActivo(BaseModel):
+    activo: bool | None = None

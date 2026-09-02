@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException
 from app.database.connection import get_db
 from sqlalchemy import select, or_
 from app.models.proveedor import Proveedor
-from app.schemas.proveedor import ProveedorResponse, ProveedorCreate, ProveedorUpdate
+from app.schemas.proveedor import ProveedorResponse, ProveedorCreate, ProveedorUpdate, ProveedorActivo
 from fastapi import APIRouter
 
 
@@ -112,26 +112,32 @@ def actualizar_proveedor(proveedor_id: int, proveedor_data: ProveedorUpdate, db 
         db.rollback()
         raise
 
-#DELETE sirve para eliminar un recurso
-@router.delete("/proveedores/{proveedores_id}")
-def eliminar_proveedor(
-        proveedores_id: int,
+#PATCH sirve para actualizar parcialmente un recurso
+@router.patch("/proveedores/{proveedor_id}", response_model=ProveedorResponse)
+def activar_desactivar_proveedor(
+        proveedor_id: int, proveedor_data: ProveedorActivo,
         db=Depends(get_db)
     ):
 
-    consulta = select(Proveedor).where(Proveedor.id == proveedores_id)
+    consulta = select(Proveedor).where(Proveedor.id == proveedor_id)
     resultado = db.execute(consulta)
     proveedor = resultado.scalar_one_or_none()
 
     if proveedor is None:
         raise HTTPException(
             status_code=404,
-            detail="Proveedor no encontrado"
+            detail="proveedor no encontrado"
         )
+
+    proveedor.activo = proveedor_data.activo
+
+    
     try:
-        db.delete(proveedor)
         db.commit()
-        return {"detail": "Proveedor eliminado correctamente"}
+        db.refresh(proveedor)
+    
+        return proveedor
+    
     except Exception:
         db.rollback()
         raise

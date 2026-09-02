@@ -36,3 +36,6 @@ class ProductoUpdate(BaseModel):
     stock_minimo: Decimal | None = None
     categoria_id: int | None = None
     activo: bool | None = None
+
+class ProductoActivo(BaseModel):
+    activo: bool | None = None
