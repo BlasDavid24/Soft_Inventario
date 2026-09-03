@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException
-from app.database.connection import get_db
+from app.dependencies import get_db
 from sqlalchemy import select, and_
-from app.models.proveedor_producto import Proveedor_producto
+from app.models.proveedor_producto import ProveedorProducto
 from app.models.proveedor import Proveedor
 from app.models.producto import Producto
 from app.schemas.proveedor_producto import ProvProducResponse, ProvProducCreate, ProvProducUpdate
@@ -13,7 +13,7 @@ router = APIRouter()
 @router.get("/proveedor_productos", response_model=list[ProvProducResponse])
 def obtener_proveedor_producto(db = Depends(get_db)):
 
-    consulta = select(Proveedor_producto)
+    consulta = select(ProveedorProducto)
     resultado = db.execute(consulta)
     provee_produc = resultado.scalars().all()
 
@@ -22,7 +22,7 @@ def obtener_proveedor_producto(db = Depends(get_db)):
 #GET solicitar/obtener un recurso por id
 @router.get("/proveedor_productos/{prov_produc_id}", response_model=ProvProducResponse)
 def obtener_proveedor_producto(prov_produc_id: int, db=Depends(get_db)):
-    consulta = select(Proveedor_producto).where(Proveedor_producto.id == prov_produc_id)
+    consulta = select(ProveedorProducto).where(ProveedorProducto.id == prov_produc_id)
     resultado = db.execute(consulta)
     proveedor = resultado.scalar_one_or_none()
 
@@ -57,17 +57,17 @@ def crear_proveedor_producto(
                 status_code=404,
                 detail=f"El producto no existe"
         )
-    consulta = select(Proveedor_producto).where(
+    consulta = select(ProveedorProducto).where(
     and_(
-        Proveedor_producto.prov_produc_id == provee_produc_data.prov_produc_id,
-        Proveedor_producto.producto_id == provee_produc_data.producto_id
+        ProveedorProducto.prov_produc_id == provee_produc_data.prov_produc_id,
+        ProveedorProducto.producto_id == provee_produc_data.producto_id
     )
 )
     resultado = db.execute(consulta)
     datos_existentes = resultado.scalar_one_or_none()
 
 
-    proveedor_producto = Proveedor_producto(
+    proveedor_producto = ProveedorProducto(
         costo_compra=provee_produc_data.costo_compra,
         producto_id=provee_produc_data.producto_id,
         prov_produc_id=provee_produc_data.prov_produc_id,
@@ -94,7 +94,7 @@ def crear_proveedor_producto(
 #PUT actualizar un recurso
 @router.put("/proveedor_productos/{prov_produc_id}", response_model=ProvProducResponse)
 def actualizar_proveedor_producto(prov_produc_id: int, proveedor_producto_data: ProvProducUpdate, db = Depends(get_db)):
-    consulta = select(Proveedor_producto).where(Proveedor_producto.id == prov_produc_id)
+    consulta = select(ProveedorProducto).where(ProveedorProducto.id == prov_produc_id)
     resultado = db.execute(consulta)
     proveedor_producto = resultado.scalar_one_or_none()
 
@@ -125,7 +125,7 @@ def eliminar_proveedor_producto(
         db=Depends(get_db)
     ):
 
-    consulta = select(Proveedor_producto).where(Proveedor_producto.id == prov_produc_id)
+    consulta = select(ProveedorProducto).where(ProveedorProducto.id == prov_produc_id)
     resultado = db.execute(consulta)
     proveedor_producto = resultado.scalar_one_or_none()
 

@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException
-from app.database.connection import get_db
+from app.dependencies import get_db
 from sqlalchemy import select
 from app.models.movimiento import Movimiento
 from app.models.usuario import Usuario

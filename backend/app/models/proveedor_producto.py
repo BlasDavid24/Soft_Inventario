@@ -1,13 +1,17 @@
 from decimal import Decimal
 from sqlalchemy import ForeignKey, Integer, Numeric, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.producto import Producto
+    from app.models.proveedor import Proveedor
+
 
 #Aqui crearemos la clase que usara SQLAlchemy 
 #para informale que esa tabla ya existe en PostgreSQL
-
-
-class Proveedor_producto(Base):
+class ProveedorProducto(Base):
     __tablename__ = "proveedor_producto"
 
     __table_args__ = (
@@ -22,3 +26,6 @@ class Proveedor_producto(Base):
     costo_compra:Mapped[Decimal] =  mapped_column(Numeric(12, 2), nullable=False)
     producto_id: Mapped[int] = mapped_column(Integer, ForeignKey("producto.id"), nullable=False)
     proveedor_id: Mapped[int] = mapped_column(Integer, ForeignKey("proveedor.id"), nullable=False)
+
+    producto: Mapped["Producto"] = relationship()
+    proveedor: Mapped["Proveedor"] = relationship()

@@ -1,11 +1,12 @@
 from fastapi import Depends, HTTPException
-from app.database.connection import get_db
+from app.dependencies import get_db
 from sqlalchemy import select
-from app.models.detalle_movimiento import Detalle_movimiento
-from app.models.movimiento import Movimiento
+from app.models.detalle_movimiento import DetalleMovimiento
 from app.models.producto import Producto
+from app.models.movimiento import Movimiento
 from app.schemas.detalle_movimiento import DetalleMovimientoCreate, DetalleMovimientoResponse, DetalleMovimientoUpdate
 from fastapi import APIRouter
+from sqlalchemy import func
 
 
 router = APIRouter()
@@ -14,7 +15,7 @@ router = APIRouter()
 @router.get("/detalle_movimiento", response_model=list[DetalleMovimientoResponse])
 def obtener_detalle_movimiento_data(db = Depends(get_db)):
 
-    consulta = select(Detalle_movimiento)
+    consulta = select(DetalleMovimiento)
     resultado = db.execute(consulta)
     detalle_movimiento = resultado.scalars().all()
 
@@ -23,7 +24,7 @@ def obtener_detalle_movimiento_data(db = Depends(get_db)):
 #GET solicitar/obtener un recurso por id
 @router.get("/detalle_movimiento/{detalle_movimiento_id}", response_model=DetalleMovimientoResponse)
 def obtener_movimiento(detalle_movimiento_id: int, db=Depends(get_db)):
-    consulta = select(Detalle_movimiento).where(Detalle_movimiento.id == detalle_movimiento_id)
+    consulta = select(DetalleMovimiento).where(DetalleMovimiento.id == detalle_movimiento_id)
     resultado = db.execute(consulta)
     detalle_movimiento = resultado.scalar_one_or_none()
 
@@ -42,15 +43,25 @@ def crear_movimiento(
     detalle_movimiento_data: DetalleMovimientoCreate,
     db = Depends(get_db)
 ):
-    
+    #Verificamos que movimiento exista
+    movimiento = db.get(Movimiento, detalle_movimiento_data.movimiento_id)
+
+    if movimiento is None:
+        raise HTTPException(
+        status_code=404,
+        detail="El movimiento no existe"
+    )
+
+    #Verificamos que movimiento exista
     producto = db.get(Producto, detalle_movimiento_data.producto_id)
     if producto is None:
-                    raise HTTPException(
-                        status_code=404,
-                        detail=f"El producto no existe"
-                )
+        raise HTTPException(
+        status_code=404,
+        detail=f"El producto no existe"
+        )
+    
 
-    detalle_movimiento = Detalle_movimiento(
+    detalle_movimiento = DetalleMovimiento(
         cantidad=detalle_movimiento_data.cantidad,
         stock_anterior=detalle_movimiento_data.stock_anterior,
         stock_nuevo=detalle_movimiento_data.stock_nuevo,
@@ -65,6 +76,17 @@ def crear_movimiento(
 
     try:
         db.add(detalle_movimiento)
+        db.flush()
+
+        #Actualizamos con cada detalle el precio del costo total del movimiento
+        consulta = select(func.sum(DetalleMovimiento.subtotal)).where(
+            DetalleMovimiento.movimiento_id == detalle_movimiento.movimiento_id
+            )
+        resultado = db.execute(consulta)
+        costo_total = resultado.scalar_one()
+        movimiento = db.get(Movimiento, detalle_movimiento.movimiento_id)
+        movimiento.costo_total = costo_total
+
         db.commit()
         db.refresh(detalle_movimiento)
         
@@ -78,7 +100,7 @@ def crear_movimiento(
 @router.put("/detalle_movimiento/{detalle_movimiento_id}", response_model=DetalleMovimientoResponse)
 def actualizar_movimiento_producto(detalle_movimiento_id: int, 
     detalle_movimiento_data: DetalleMovimientoUpdate, db = Depends(get_db)):
-    consulta = select(Detalle_movimiento).where(Detalle_movimiento.id == detalle_movimiento_id)
+    consulta = select(DetalleMovimiento).where(DetalleMovimiento.id == detalle_movimiento_id)
     resultado = db.execute(consulta)
     detalle_movimiento = resultado.scalar_one_or_none()
 
@@ -104,6 +126,30 @@ def actualizar_movimiento_producto(detalle_movimiento_id: int,
 
         return detalle_movimiento
 
+    except Exception:
+        db.rollback()
+        raise
+
+#DELETE sirve para eliminar un recurso
+@router.delete("/detalle_movimiento/{detalle_movimiento_id}")
+def eliminar_proveedor_producto(
+        detalle_movimiento_id: int,
+        db=Depends(get_db)
+    ):
+
+    consulta = select(DetalleMovimiento).where(DetalleMovimiento.id == detalle_movimiento_id)
+    resultado = db.execute(consulta)
+    detalle_movimiento = resultado.scalar_one_or_none()
+
+    if detalle_movimiento is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Informacion no encontrado"
+        )
+    try:
+        db.delete(detalle_movimiento)
+        db.commit()
+        return {"detail": "Informacion eliminada correctamente"}
     except Exception:
         db.rollback()
         raise

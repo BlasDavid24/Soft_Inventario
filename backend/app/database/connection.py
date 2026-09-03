@@ -28,13 +28,3 @@ SessionLocal = sessionmaker(
     bind=engine
 )
 
-# Creamos una dependencia que proporciona una sesión
-# y garantiza que se cierre al finalizar su uso.
-def get_db():
-    db = SessionLocal()
-
-    try:
-        yield db
-    finally:
-        db.close()
-

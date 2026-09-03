@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException
-from app.database.connection import get_db
+from app.dependencies import get_db
 from sqlalchemy import select, or_
 from app.models.proveedor import Proveedor
 from app.schemas.proveedor import ProveedorResponse, ProveedorCreate, ProveedorUpdate, ProveedorActivo

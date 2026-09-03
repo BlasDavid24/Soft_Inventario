@@ -16,5 +16,5 @@ class Usuario(Base):
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     rol: Mapped[str] = mapped_column(String(20), nullable=False)
     activo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-    fecha_creacion: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=func.now())
+    fecha_creacion: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
     email: Mapped[str] = mapped_column(String(150), nullable=False, unique=True)

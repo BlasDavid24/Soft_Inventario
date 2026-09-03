@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException
-from app.database.connection import get_db
+from app.dependencies import get_db
 from sqlalchemy import select, or_
 from app.models.usuario import Usuario
 from app.schemas.usuario import UsuarioResponse, UsuarioCreate, UsuarioUpdate, UsuarioActivo

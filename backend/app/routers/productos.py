@@ -1,9 +1,11 @@
 from fastapi import Depends, HTTPException
-from app.database.connection import get_db
+from app.dependencies import get_db
 from sqlalchemy import select
 from app.models.producto import Producto
 from app.schemas.producto import ProductoCreate, ProductoResponse, ProductoUpdate, ProductoActivo
 from fastapi import APIRouter
+from app.models.categoria import Categoria
+from sqlalchemy.orm import joinedload
 
 
 router = APIRouter()
@@ -14,7 +16,7 @@ router = APIRouter()
 @router.get("/productos", response_model=list[ProductoResponse])
 def obtener_productos(db = Depends(get_db)):
 
-    consulta = select(Producto)
+    consulta = select(Producto).options(joinedload(Producto.categoria))
     resultado = db.execute(consulta)
     productos = resultado.scalars().all()
 
@@ -23,7 +25,7 @@ def obtener_productos(db = Depends(get_db)):
 #GET solicitar/obtener un recurso por id
 @router.get("/productos/{producto_id}", response_model=ProductoResponse)
 def obtener_producto(producto_id: int, db=Depends(get_db)):
-    consulta = select(Producto).where(Producto.id == producto_id)
+    consulta = select(Producto).options(joinedload(Producto.categoria)).where(Producto.id == producto_id)
     resultado = db.execute(consulta)
     producto = resultado.scalar_one_or_none()
 
@@ -58,9 +60,20 @@ def crear_producto(
 
     if sku_existente is not None:
         raise HTTPException(
-                    status_code=409,
-                    detail= f"El SKU '{producto_data.sku}' ya existe"
+                status_code=409,
+                detail= f"El SKU '{producto_data.sku}' ya existe"
                 )
+
+    #Consultamos si el ID categoria ya existe en la bd
+    consulta_id_existente = select(Categoria).where(Categoria.id == producto_data.categoria_id)
+    resultado_id_existente = db.execute(consulta_id_existente)
+    id_existente = resultado_id_existente.scalar_one_or_none()
+
+    if id_existente is None:
+        raise HTTPException(
+            status_code=404,
+            detail= f"La categoria no existe"
+        )
 
     try:
         db.add(producto)
@@ -85,6 +98,18 @@ def actualizar_producto(producto_id: int, producto_data: ProductoUpdate, db = De
                 status_code=404,
                 detail="Producto no encontrado"
             )
+    
+    #Consultamos si el ID categoria ya existe en la bd
+    consulta_sku_existente = select(Producto).where(Producto.sku == producto_data.sku,
+    Producto.id != producto_id)
+    resultado_sku_existente = db.execute(consulta_sku_existente)
+    sku_existente = resultado_sku_existente.scalar_one_or_none()
+
+    if sku_existente is not None:
+        raise HTTPException(
+            status_code=409,
+            detail= f"El SKU '{producto_data.sku}' ya existe"
+        )
     
     datos_actualizados = producto_data.model_dump(exclude_unset=True)
     for campo, valor in datos_actualizados.items():
