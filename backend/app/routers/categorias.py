@@ -52,9 +52,9 @@ def crear_categoria(
 
     if nombre_existente is not None:
         raise HTTPException(
-                    status_code=409,
-                    detail= f"El nombre '{categoria_data.nombre}' ya existe"
-                )
+            status_code=409,
+            detail= f"El nombre '{categoria_data.nombre}' ya existe"
+        )
 
     try:
         db.add(categoria)
@@ -75,10 +75,10 @@ def actualizar_categoria(categoria_id: int, categoria_data: CategoriaUpdate, db 
     categoria = resultado.scalar_one_or_none()
 
     if categoria is None:
-            raise HTTPException(
-                status_code=404,
-                detail="categoria no encontrada"
-            )
+        raise HTTPException(
+            status_code=404,
+            detail="categoria no encontrada"
+         )
 
     #Consultamos si un nombre ya existe en la bd
     consulta_duplicado = select(Categoria).where(Categoria.nombre == categoria_data.nombre,
@@ -88,8 +88,8 @@ def actualizar_categoria(categoria_id: int, categoria_data: CategoriaUpdate, db 
     
     if duplicado is not None:
         raise HTTPException(
-        status_code=409,
-        detail="Categoria ya existe"
+            status_code=409,
+            detail="Categoria ya existe"
         )
     
     datos_actualizados = categoria_data.model_dump(exclude_unset=True)

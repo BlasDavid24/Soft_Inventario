@@ -1,30 +1,32 @@
 from decimal import Decimal
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
+
+# Schema compacto para la línea de detalle
+class ProductoMovimientoResponse(BaseModel):
+    id: int
+    nombre: str
+    sku: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Esquema para responder el Detalle (Auditoría limpia y legible)
 class DetalleMovimientoResponse(BaseModel):
     id: int
-    cantidad: Decimal
-    stock_anterior: Decimal
-    stock_nuevo: Decimal
+    cantidad: int
     costo_unitario: Decimal
     subtotal: Decimal
-    producto_id: int
-    movimiento_id: int
-
-#Esquema para validar los datos al crear un producto
-class DetalleMovimientoCreate(BaseModel):
-    cantidad: Decimal
     stock_anterior: Decimal
     stock_nuevo: Decimal
-    costo_unitario: Decimal
-    producto_id: int
+    producto: ProductoMovimientoResponse
     movimiento_id: int
 
-#Esquema para validar los datos al actualizar un producto
-class DetalleMovimientoUpdate(BaseModel):
-    cantidad: Decimal | None = None
-    stock_anterior: Decimal | None = None
-    stock_nuevo: Decimal | None = None
-    costo_unitario: Decimal | None = None
-    producto_id: int | None = None
-    movimiento_id: int | None = None
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Esquema que envía el cliente al registrar 
+class DetalleMovimientoCreate(BaseModel):
+    producto_id: int = Field(..., gt=0)
+    cantidad: int = Field(..., gt=0, description="Cantidad de unidades a mover")
+    costo_unitario: Decimal = Field(..., gt=0, decimal_places=2)

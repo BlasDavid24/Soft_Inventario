@@ -92,12 +92,38 @@ def actualizar_proveedor(proveedor_id: int, proveedor_data: ProveedorUpdate, db 
     resultado = db.execute(consulta)
     proveedor = resultado.scalar_one_or_none()
 
+    #Valida si existen el proveedor
     if proveedor is None:
             raise HTTPException(
                 status_code=404,
                 detail="proveedor no encontrado"
             )
-    
+
+    #Valida que email y rut no sean repetidos
+    if proveedor_data.rut is not None or proveedor_data.email is not None:
+        consulta = select(Proveedor).where(
+            or_(
+                Proveedor.email == proveedor_data.email,
+                Proveedor.rut == proveedor_data.rut
+            ),
+        Proveedor.id != proveedor_id
+        )
+    resultado = db.execute(consulta)
+    datos_existentes = resultado.scalars().all()
+
+    errores = []
+    for dato_existente in datos_existentes:
+        if proveedor_data.rut and dato_existente.rut == proveedor_data.rut:
+            errores.append(f"El RUT {proveedor_data.rut} ya existe")
+        if proveedor_data.email and dato_existente.email == proveedor_data.email:
+            errores.append(f"El email {proveedor_data.email} ya existe")
+
+    if errores:
+        raise HTTPException(
+            status_code=409, 
+            detail=errores
+            )
+       
     datos_actualizados = proveedor_data.model_dump(exclude_unset=True)
     for campo, valor in datos_actualizados.items():
         setattr(proveedor, campo, valor)

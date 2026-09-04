@@ -15,7 +15,6 @@ class ProductoResponse(BaseModel):
     activo: bool
     fecha_creacion: datetime
     fecha_act: datetime
-    categoria_id: int
     categoria: CategoriaResponse | None = None
 
     model_config = ConfigDict(from_attributes=True)

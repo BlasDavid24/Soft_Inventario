@@ -4,6 +4,7 @@ from sqlalchemy import select, and_
 from app.models.proveedor_producto import ProveedorProducto
 from app.models.proveedor import Proveedor
 from app.models.producto import Producto
+from sqlalchemy.orm import joinedload
 from app.schemas.proveedor_producto import ProvProducResponse, ProvProducCreate, ProvProducUpdate
 from fastapi import APIRouter
 
@@ -11,9 +12,12 @@ router = APIRouter()
 
 #GET solicitar/obtener un recurso
 @router.get("/proveedor_productos", response_model=list[ProvProducResponse])
-def obtener_proveedor_producto(db = Depends(get_db)):
+def obtener_proveedor_productos(db = Depends(get_db)):
 
-    consulta = select(ProveedorProducto)
+    consulta = select(ProveedorProducto).options(
+            joinedload(ProveedorProducto.producto),
+            joinedload(ProveedorProducto.proveedor)
+        )
     resultado = db.execute(consulta)
     provee_produc = resultado.scalars().all()
 
@@ -22,7 +26,10 @@ def obtener_proveedor_producto(db = Depends(get_db)):
 #GET solicitar/obtener un recurso por id
 @router.get("/proveedor_productos/{prov_produc_id}", response_model=ProvProducResponse)
 def obtener_proveedor_producto(prov_produc_id: int, db=Depends(get_db)):
-    consulta = select(ProveedorProducto).where(ProveedorProducto.id == prov_produc_id)
+    consulta = select(ProveedorProducto).options(
+            joinedload(ProveedorProducto.producto),
+            joinedload(ProveedorProducto.proveedor)
+        ).where(ProveedorProducto.id == prov_produc_id)
     resultado = db.execute(consulta)
     proveedor = resultado.scalar_one_or_none()
 
@@ -44,7 +51,7 @@ def crear_proveedor_producto(
 ):
 
     #Verificamos que proveedor exista
-    proveedor = db.get(Proveedor, provee_produc_data.prov_produc_id)
+    proveedor = db.get(Proveedor, provee_produc_data.proveedor_id)
     if proveedor is None:
             raise HTTPException(
                 status_code=404,
@@ -57,28 +64,31 @@ def crear_proveedor_producto(
                 status_code=404,
                 detail=f"El producto no existe"
         )
+
+    #Verficamos que proveedor y producto no existan
     consulta = select(ProveedorProducto).where(
     and_(
-        ProveedorProducto.prov_produc_id == provee_produc_data.prov_produc_id,
+        ProveedorProducto.proveedor_id == provee_produc_data.proveedor_id,
         ProveedorProducto.producto_id == provee_produc_data.producto_id
     )
 )
     resultado = db.execute(consulta)
     datos_existentes = resultado.scalar_one_or_none()
 
-
-    proveedor_producto = ProveedorProducto(
-        costo_compra=provee_produc_data.costo_compra,
-        producto_id=provee_produc_data.producto_id,
-        prov_produc_id=provee_produc_data.prov_produc_id,
-    )
-
-    #Verificamos que proveedor_producto no exista
     if datos_existentes is not None:
         raise HTTPException(
             status_code=409,
             detail=f"El proveedor '{proveedor.nombre}' y el producto '{producto.nombre}' ya estan vinculados"
     )
+
+
+    proveedor_producto = ProveedorProducto(
+        costo_compra=provee_produc_data.costo_compra,
+        producto_id=provee_produc_data.producto_id,
+        proveedor_id=provee_produc_data.proveedor_id,
+    )
+
+
 
     try:
         db.add(proveedor_producto)

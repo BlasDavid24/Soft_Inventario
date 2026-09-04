@@ -15,11 +15,11 @@ class Movimiento(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     tipo: Mapped[str] = mapped_column(String(50), nullable=False)
-    costo_total: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=True)
+    costo_total: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     motivo: Mapped[str] = mapped_column(String(250), nullable=True)
     fecha: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
-    usuario_id: Mapped[int] = mapped_column(Integer, ForeignKey("usuario.id"), nullable=False)
-    proveedor_id: Mapped[int] = mapped_column(Integer, ForeignKey("proveedor.id"), nullable=False)
+    usuario_id: Mapped[int] = mapped_column(Integer, ForeignKey("usuario.id"), nullable=True)
+    proveedor_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("proveedor.id"), nullable=True)
 
     usuario: Mapped["Usuario"] = relationship()
     proveedor: Mapped[Optional["Proveedor"]] = relationship()

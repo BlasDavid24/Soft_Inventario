@@ -1,31 +1,33 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-#Esquema para validar los datos al consultar un proveedor
+
 class ProveedorResponse(BaseModel):
     id: int
     nombre: str
     rut: str
-    email: str
-    telefono: str
-    direccion: str
-    activo: bool    
-    
-#Esquema para validar los datos al crear un proveedor
-class ProveedorCreate(BaseModel):
-    nombre: str
-    rut: str
-    email: str
-    telefono: str
-    direccion: str
+    email: EmailStr
+    telefono: str | None = None
+    direccion: str | None = None
+    activo: bool
 
-#Esquema para validar los datos al actualizar un proveedor
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ProveedorCreate(BaseModel):
+    nombre: str = Field(..., min_length=2, max_length=150)
+    rut: str = Field(..., min_length=8, max_length=11)
+    email: EmailStr
+    telefono: str | None = Field(default=None, max_length=15)
+    direccion: str | None = Field(default=None, max_length=255)
+
+
 class ProveedorUpdate(BaseModel):
     nombre: str | None = None
     rut: str | None = None
-    email: str | None = None
+    email: EmailStr | None = None
     telefono: str | None = None
     direccion: str | None = None
-    activo: bool | None = None
+
 
 class ProveedorActivo(BaseModel):
-    activo: bool | None = None
+    activo: bool

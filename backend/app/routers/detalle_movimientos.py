@@ -4,7 +4,7 @@ from sqlalchemy import select
 from app.models.detalle_movimiento import DetalleMovimiento
 from app.models.producto import Producto
 from app.models.movimiento import Movimiento
-from app.schemas.detalle_movimiento import DetalleMovimientoCreate, DetalleMovimientoResponse, DetalleMovimientoUpdate
+from app.schemas.detalle_movimiento import DetalleMovimientoCreate, DetalleMovimientoResponse
 from fastapi import APIRouter
 from sqlalchemy import func
 
@@ -90,40 +90,6 @@ def crear_movimiento(
         db.commit()
         db.refresh(detalle_movimiento)
         
-        return detalle_movimiento
-
-    except Exception:
-        db.rollback()
-        raise
-
-#PUT actualizar un recurso
-@router.put("/detalle_movimiento/{detalle_movimiento_id}", response_model=DetalleMovimientoResponse)
-def actualizar_movimiento_producto(detalle_movimiento_id: int, 
-    detalle_movimiento_data: DetalleMovimientoUpdate, db = Depends(get_db)):
-    consulta = select(DetalleMovimiento).where(DetalleMovimiento.id == detalle_movimiento_id)
-    resultado = db.execute(consulta)
-    detalle_movimiento = resultado.scalar_one_or_none()
-
-    if detalle_movimiento is None:
-            raise HTTPException(
-                status_code=404,
-                detail="Informacion no encontrado"
-            )
-    
-    datos_actualizados = detalle_movimiento_data.model_dump(exclude_unset=True)
-    for campo, valor in datos_actualizados.items():
-        setattr(detalle_movimiento, campo, valor)
-
-
-    detalle_movimiento.subtotal = (
-        detalle_movimiento.cantidad *
-        detalle_movimiento.costo_unitario
-    )
-    
-    try:
-        db.commit()
-        db.refresh(detalle_movimiento)
-
         return detalle_movimiento
 
     except Exception:

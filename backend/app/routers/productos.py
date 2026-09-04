@@ -60,9 +60,9 @@ def crear_producto(
 
     if sku_existente is not None:
         raise HTTPException(
-                status_code=409,
-                detail= f"El SKU '{producto_data.sku}' ya existe"
-                )
+            status_code=409,
+            detail= f"El SKU '{producto_data.sku}' ya existe"
+        )
 
     #Consultamos si el ID categoria ya existe en la bd
     consulta_id_existente = select(Categoria).where(Categoria.id == producto_data.categoria_id)
@@ -89,15 +89,17 @@ def crear_producto(
 #PUT actualizar un recurso
 @router.put("/productos/{producto_id}", response_model=ProductoResponse)
 def actualizar_producto(producto_id: int, producto_data: ProductoUpdate, db = Depends(get_db)):
+    
+
     consulta = select(Producto).where(Producto.id == producto_id)
     resultado = db.execute(consulta)
     producto = resultado.scalar_one_or_none()
 
     if producto is None:
-            raise HTTPException(
-                status_code=404,
-                detail="Producto no encontrado"
-            )
+        raise HTTPException(
+            status_code=404,
+            detail="Producto no encontrado"
+        )
     
     #Consultamos si el ID categoria ya existe en la bd
     consulta_sku_existente = select(Producto).where(Producto.sku == producto_data.sku,
@@ -111,9 +113,22 @@ def actualizar_producto(producto_id: int, producto_data: ProductoUpdate, db = De
             detail= f"El SKU '{producto_data.sku}' ya existe"
         )
     
+   
     datos_actualizados = producto_data.model_dump(exclude_unset=True)
     for campo, valor in datos_actualizados.items():
         setattr(producto, campo, valor)
+
+    #SE busca si la categoria existe o no
+    consulta_categoria = select(Categoria).where(Categoria.id == producto_data.categoria_id)
+    resultado_categoria = db.execute(consulta_categoria)
+    categoria_existente = resultado_categoria.scalar_one_or_none()
+        
+    if "categoria_id" in datos_actualizados:
+        if categoria_existente is None:
+            raise HTTPException(
+                status_code=404,
+                detail= f"La categoria no existe"
+                )
 
     try:
         db.commit()

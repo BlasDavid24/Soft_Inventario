@@ -10,7 +10,7 @@ router = APIRouter()
 
 #GET solicitar/obtener un recurso
 @router.get("/usuarios", response_model=list[UsuarioResponse])
-def obtener_usuario(db = Depends(get_db)):
+def obtener_usuarios(db = Depends(get_db)):
 
     consulta = select(Usuario)
     resultado = db.execute(consulta)
@@ -97,10 +97,39 @@ def actualizar_usuario(usuario_id: int, usuario_data: UsuarioUpdate , db = Depen
     resultado = db.execute(consulta)
     usuario = resultado.scalar_one_or_none()
 
+    #Valida que el usuario exista
     if usuario is None:
             raise HTTPException(
                 status_code=404,
                 detail="Usuario no encontrado"
+            )
+
+    #Valida que email, username  y rut no sean repetidos
+    if usuario_data.rut is not None or usuario_data.email is not None or usuario_data.username is not None:
+        consulta = select(Usuario).where(
+            or_(
+                Usuario.email == usuario_data.email,
+                Usuario.rut == usuario_data.rut,
+                Usuario.username == usuario_data.username
+            ),
+            Usuario.id != usuario_id
+        )
+        resultado = db.execute(consulta)
+        datos_existentes = resultado.scalars().all()
+    
+        errores = []
+        for dato_existente in datos_existentes:
+            if usuario_data.rut and dato_existente.rut == usuario_data.rut:
+                errores.append(f"El RUT {usuario_data.rut} ya existe")
+            if usuario_data.email and dato_existente.email == usuario_data.email:
+                errores.append(f"El email {usuario_data.email} ya existe")
+            if usuario_data.username and dato_existente.username == usuario_data.username:
+                errores.append(f"El username {usuario_data.username} ya existe")
+    
+    if errores:
+        raise HTTPException(
+            status_code=409, 
+            detail=errores
             )
     
     datos_actualizados = usuario_data.model_dump(exclude_unset=True)
