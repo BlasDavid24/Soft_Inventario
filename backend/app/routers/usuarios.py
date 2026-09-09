@@ -1,26 +1,50 @@
 from fastapi import Depends, HTTPException
-from app.dependencies import get_db
 from sqlalchemy import select, or_
 from app.models.usuario import Usuario
 from app.schemas.usuario import UsuarioResponse, UsuarioCreate, UsuarioUpdate, UsuarioActivo
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from app.security.password import hash_password
+from app.dependencies.auth import get_db, requerir_rol
 
-router = APIRouter()
+router = APIRouter(prefix="/usuarios", tags=["Usuario"])
 
-#GET solicitar/obtener un recurso
-@router.get("/usuarios", response_model=list[UsuarioResponse])
-def obtener_usuarios(db = Depends(get_db)):
-
+# GET solicitar/obtener usuarios (con búsqueda por texto y filtros por rol y estado)
+@router.get("/filtrar", response_model=list[UsuarioResponse])
+def obtener_usuarios(
+    buscar: str | None = Query(default=None, description="Buscar por nombre, apellido, username o RUT"),
+    rol: str | None = Query(default=None, description="Filtrar por rol"),
+    activo: bool | None = Query(default=None, description="Filtrar por estado activo/inactivo"),
+    db = Depends(get_db),
+    usuario_admin: Usuario = Depends(requerir_rol(["ADMINISTRADOR"]))
+):
     consulta = select(Usuario)
-    resultado = db.execute(consulta)
-    usuario = resultado.scalars().all()
 
-    return usuario
+    if buscar:
+        termino = f"%{buscar.strip()}%"
+        consulta = consulta.where(
+            or_(
+                Usuario.nombre.ilike(termino),
+                Usuario.apellido.ilike(termino),
+                Usuario.username.ilike(termino),
+                Usuario.rut.ilike(termino)
+            )
+        )
+
+    if rol:
+        consulta = consulta.where(Usuario.rol == rol)
+
+    if activo is not None:
+        consulta = consulta.where(Usuario.activo == activo)
+
+    resultado = db.execute(consulta)
+    usuarios = resultado.scalars().all()
+
+    return usuarios
 
 #GET solicitar/obtener un recurso por id
-@router.get("/usuarios/{usuario_id}", response_model=UsuarioResponse)
-def obtener_usuario(usuario_id: int, db=Depends(get_db)):
+@router.get("/filtrar ID/{usuario_id}", response_model=UsuarioResponse)
+def obtener_usuario(usuario_id: int, db=Depends(get_db),
+    usuario_admin: Usuario = Depends(requerir_rol(["ADMINISTRADOR"]))):
     consulta = select(Usuario).where(Usuario.id == usuario_id)
     resultado = db.execute(consulta)
     usuario = resultado.scalar_one_or_none()
@@ -35,10 +59,11 @@ def obtener_usuario(usuario_id: int, db=Depends(get_db)):
     return usuario
 
 #POST crea un recurso
-@router.post("/usuarios", response_model=UsuarioResponse)
+@router.post("/crear", response_model=UsuarioResponse)
 def crear_usuario(
     usuario_data: UsuarioCreate,
-    db = Depends(get_db)
+    db = Depends(get_db),
+    usuario_admin: Usuario = Depends(requerir_rol(["ADMINISTRADOR"]))
 ):
     consulta = select(Usuario).where(
     or_(
@@ -56,10 +81,8 @@ def crear_usuario(
 
         if dato_existente.rut == usuario_data.rut:
             errores.append(f"El rut '{usuario_data.rut}' ya existe")
-
         if dato_existente.email == usuario_data.email:
             errores.append(f"El email '{usuario_data.email}' ya existe")
-
         if dato_existente.username == usuario_data.username:
             errores.append(f"El username '{usuario_data.username}' ya existe")
 
@@ -91,8 +114,9 @@ def crear_usuario(
         raise
 
 #PUT actualizar un recurso
-@router.put("/usuarios/{usuario_id}", response_model=UsuarioResponse)
-def actualizar_usuario(usuario_id: int, usuario_data: UsuarioUpdate , db = Depends(get_db)):
+@router.put("/editar/{usuario_id}", response_model=UsuarioResponse)
+def actualizar_usuario(usuario_id: int, usuario_data: UsuarioUpdate , db = Depends(get_db),
+    usuario_admin: Usuario = Depends(requerir_rol(["ADMINISTRADOR"]))):
     consulta = select(Usuario).where(Usuario.id == usuario_id)
     resultado = db.execute(consulta)
     usuario = resultado.scalar_one_or_none()
@@ -116,23 +140,43 @@ def actualizar_usuario(usuario_id: int, usuario_data: UsuarioUpdate , db = Depen
         )
         resultado = db.execute(consulta)
         datos_existentes = resultado.scalars().all()
+        datos_actualizados = usuario_data.model_dump(exclude_unset=True)
     
+# Validar duplicados de RUT, Email o Username solo si cambiaron
+    nuevo_rut = datos_actualizados.get("rut")
+    nuevo_email = datos_actualizados.get("email")
+    nuevo_username = datos_actualizados.get("username")
+
+    condiciones_duplicado = []
+    if nuevo_rut and nuevo_rut != usuario.rut:
+        condiciones_duplicado.append(Usuario.rut == nuevo_rut)
+    if nuevo_email and nuevo_email != usuario.email:
+        condiciones_duplicado.append(Usuario.email == nuevo_email)
+    if nuevo_username and nuevo_username != usuario.username:
+        condiciones_duplicado.append(Usuario.username == nuevo_username)
+
+    if condiciones_duplicado:
+        consulta_duplicados = select(Usuario).where(
+            or_(*condiciones_duplicado),
+            Usuario.id != usuario_id
+        )
+        duplicados = db.execute(consulta_duplicados).scalars().all()
+
         errores = []
-        for dato_existente in datos_existentes:
-            if usuario_data.rut and dato_existente.rut == usuario_data.rut:
-                errores.append(f"El RUT {usuario_data.rut} ya existe")
-            if usuario_data.email and dato_existente.email == usuario_data.email:
-                errores.append(f"El email {usuario_data.email} ya existe")
-            if usuario_data.username and dato_existente.username == usuario_data.username:
-                errores.append(f"El username {usuario_data.username} ya existe")
-    
-    if errores:
-        raise HTTPException(
-            status_code=409, 
-            detail=errores
+        for dato in duplicados:
+            if nuevo_rut and dato.rut == nuevo_rut:
+                errores.append(f"El RUT '{nuevo_rut}' ya existe")
+            if nuevo_email and dato.email == nuevo_email:
+                errores.append(f"El email '{nuevo_email}' ya existe")
+            if nuevo_username and dato.username == nuevo_username:
+                errores.append(f"El username '{nuevo_username}' ya existe")
+
+        if errores:
+            raise HTTPException(
+                status_code=409, 
+                detail=errores
             )
     
-    datos_actualizados = usuario_data.model_dump(exclude_unset=True)
     for campo, valor in datos_actualizados.items():
         setattr(usuario, campo, valor)
 
@@ -147,10 +191,11 @@ def actualizar_usuario(usuario_id: int, usuario_data: UsuarioUpdate , db = Depen
         raise
 
 #PATCH sirve para actualizar parcialmente un recurso
-@router.patch("/usuarios/{usuario_id}", response_model=UsuarioResponse)
+@router.patch("/desactivar/{usuario_id}", response_model=UsuarioResponse)
 def activar_desactivar_usuario(
         usuario_id: int, usuario_data: UsuarioActivo,
-        db=Depends(get_db)
+        db=Depends(get_db),
+        usuario_admin: Usuario = Depends(requerir_rol(["ADMINISTRADOR"]))
     ):
 
     consulta = select(Usuario).where(Usuario.id == usuario_id)

@@ -2,6 +2,7 @@ from decimal import Decimal
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 from app.schemas.categoria import CategoriaResponse
+from typing import Literal
 
 
 class ProductoResponse(BaseModel):
@@ -19,12 +20,12 @@ class ProductoResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
+uniMedida = Literal["KG", "UNIDAD"]
 class ProductoCreate(BaseModel):
     nombre: str = Field(..., min_length=1, max_length=150)
     sku: str = Field(..., min_length=1, max_length=50)
     precio: Decimal = Field(..., ge=0)
-    uni_medida: str = Field(..., min_length=1, max_length=10)
+    uni_medida: uniMedida
     stock_actual: Decimal = Field(default=Decimal("0.000"), ge=0)
     stock_minimo: Decimal = Field(default=Decimal("0.000"), ge=0)
     categoria_id: int
@@ -37,7 +38,6 @@ class ProductoUpdate(BaseModel):
     uni_medida: str | None = None
     stock_minimo: Decimal | None = Field(default=None, ge=0)
     categoria_id: int | None = None
-    activo: bool | None = None
 
 
 class ProductoActivo(BaseModel):

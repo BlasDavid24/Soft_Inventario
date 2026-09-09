@@ -1,4 +1,3 @@
-from typing import Generator
 from app.database.connection import SessionLocal
 
 # Creamos una dependencia que proporciona una sesión

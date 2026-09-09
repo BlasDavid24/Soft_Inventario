@@ -2,7 +2,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 # Roles válidos del sistema
-RolUsuario = Literal["ADMIN", "OPERADOR", "BODEGUERO"]
+RolUsuario = Literal["ADMINISTRADOR", "ENCARGADO", "CONSULTOR"]
 
 
 class UsuarioResponse(BaseModel):

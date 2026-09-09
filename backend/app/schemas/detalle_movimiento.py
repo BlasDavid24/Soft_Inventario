@@ -2,7 +2,7 @@ from decimal import Decimal
 from pydantic import BaseModel, ConfigDict, Field
 
 
-# Schema compacto para la línea de detalle
+# Schema compacto para mostrar informacion de producto
 class ProductoMovimientoResponse(BaseModel):
     id: int
     nombre: str
@@ -11,7 +11,7 @@ class ProductoMovimientoResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# Esquema para responder el Detalle (Auditoría limpia y legible)
+# Esquema para responder el Detalle
 class DetalleMovimientoResponse(BaseModel):
     id: int
     cantidad: int
@@ -20,7 +20,6 @@ class DetalleMovimientoResponse(BaseModel):
     stock_anterior: Decimal
     stock_nuevo: Decimal
     producto: ProductoMovimientoResponse
-    movimiento_id: int
 
     model_config = ConfigDict(from_attributes=True)
 
