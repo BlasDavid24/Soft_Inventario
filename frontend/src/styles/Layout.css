@@ -1,0 +1,63 @@
+/* 1. Contenedor maestro de pantalla completa */
+.layout-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8fafc; /* Gris claro de fondo general */
+}
+
+/* 2. Barra lateral fija */
+.layout-sidebar {
+  width: 260px;
+  min-width: 260px; /* Evita que el contenido central la aplaste */
+  background-color: #0f172a; /* Azul oscuro pizarra */
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+/* 3. Área de contenido dinámico */
+.layout-main {
+  flex: 1; /* Ocupa el 100% del ancho restante */
+  padding: 32px;
+  overflow-y: auto; /* Si el contenido es muy largo, el scroll va solo aquí */
+  box-sizing: border-box;
+}
+
+/* 4. Regla responsive: dispositivos con ancho menor o igual a 768px */
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column; /* Cambia de fila a columna (sidebar arriba, contenido abajo) */
+  }
+
+  .layout-sidebar {
+    width: 100%;
+    min-width: 100%;
+    padding: 16px;
+  }
+
+  .layout-main {
+    padding: 16px; /* Menos espacio de relleno para no desperdiciar pantalla en celular */
+  }
+}
+
+/*Imagen del logo del software*/
+
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 22px;     
+  margin-bottom: 2rem;
+}
+
+.logo-size {
+  width: 60px;
+  height: 60px;
+  object-fit: contain; 
+}
+
+.model-p1 {
+    
+}
