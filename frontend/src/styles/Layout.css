@@ -1,16 +1,15 @@
-/* 1. Contenedor maestro de pantalla completa */
 .layout-container {
   display: flex;
   width: 100%;
   min-height: 100vh;
-  background-color: #f8fafc; /* Gris claro de fondo general */
+  background-color: #f8fafc;
 }
 
-/* 2. Barra lateral fija */
+
 .layout-sidebar {
-  width: 260px;
-  min-width: 260px; /* Evita que el contenido central la aplaste */
-  background-color: #0f172a; /* Azul oscuro pizarra */
+  width: 290px;
+  min-width: 260px;
+  background-color: #0f172a;
   color: #f8fafc;
   display: flex;
   flex-direction: column;
@@ -18,18 +17,16 @@
   box-sizing: border-box;
 }
 
-/* 3. Área de contenido dinámico */
 .layout-main {
-  flex: 1; /* Ocupa el 100% del ancho restante */
-  padding: 32px;
-  overflow-y: auto; /* Si el contenido es muy largo, el scroll va solo aquí */
+  flex: 1;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 
-/* 4. Regla responsive: dispositivos con ancho menor o igual a 768px */
+
 @media (max-width: 768px) {
   .layout-container {
-    flex-direction: column; /* Cambia de fila a columna (sidebar arriba, contenido abajo) */
+    flex-direction: column;
   }
 
   .layout-sidebar {
@@ -39,8 +36,65 @@
   }
 
   .layout-main {
-    padding: 16px; /* Menos espacio de relleno para no desperdiciar pantalla en celular */
+    padding: 16px;
+    /* Menos espacio de relleno para no desperdiciar pantalla en celular */
   }
+}
+
+/*Acceso a las paginas principales*/
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 8px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+
+.nav-item:hover {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+
+.nav-item.active {
+  background-color: #1e3a5f; 
+  color: #93c5fd; 
+  font-weight: 600;
+}
+
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  height: 70%;
+  width: 4px;
+  background-color: #3b82f6; 
+  border-radius: 0 4px 4px 0; 
 }
 
 /*Imagen del logo del software*/
@@ -48,16 +102,101 @@
 .logo-box {
   display: flex;
   align-items: center;
-  gap: 22px;     
   margin-bottom: 2rem;
+  width: 100%;
 }
 
 .logo-size {
-  width: 60px;
-  height: 60px;
-  object-fit: contain; 
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .model-p1 {
-    
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.model-p2 {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  margin-top: 3px;
+  word-wrap: break-word;
+}
+
+.bar-texto-sub {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/*Barra que separa "cerrar sesion"*/
+
+.sidebar-divider {
+  border: none;
+  border-top: 1px solid #334155;
+  margin: 1.5rem 0;
+  width: 100%;
+  opacity: 0.6;
+}
+
+.model-p3 {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-style: italic;
+  line-height: 1.35;
+  letter-spacing: 0.2px;
+}
+
+/*boton cerrar sesion*/
+
+.btn-login {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #3b1e28;
+  color: #fca5a5;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.sidebar-logout {
+  width: 100%;
+}
+
+.btn-login:hover {
+  background-color: #4c2432;
+  color: #fecaca;
+}
+
+.btn-login:active {
+  transform: scale(0.98);
+}
+
+.logout-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+.sidebar-subtext {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-style: italic;
+  text-align: center;
+  line-height: 1.4;
+  margin-top: 33px;
+  padding: 0 10px;
+  box-sizing: border-box;
 }

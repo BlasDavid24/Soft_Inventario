@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 from sqlalchemy import select, or_
 from app.models.usuario import Usuario
 from app.schemas.usuario import UsuarioResponse, UsuarioCreate, UsuarioUpdate, UsuarioActivo
@@ -205,11 +205,16 @@ def activar_desactivar_usuario(
     if usuario is None:
         raise HTTPException(
             status_code=404,
-            detail="usuario no encontrado"
+            detail="Usuario no encontrado"
+        )
+
+    if usuario_id == usuario_admin.id and not usuario_data.activo:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No puedes desactivar tu propia cuenta de usuario en sesión."
         )
 
     usuario.activo = usuario_data.activo
-
     
     try:
         db.commit()

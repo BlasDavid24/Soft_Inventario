@@ -1,0 +1,819 @@
+/* Contenedor Principal */
+.usuarios-container {      
+  margin: 0 auto;           
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+/* Encabezado */
+.usuarios-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;             
+  gap: 16px;                  
+  width: 97%;
+  padding-left: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  box-sizing: border-box;
+}
+
+/* Grupo izquierdo: icono + títulos */
+.usuarios-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;             
+  flex: 1 1 auto;
+}
+
+/* Recuadro redondeado azul del icono */
+.header-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: #e0f2fe;
+  color: #0284c7;
+  flex-shrink: 0;   
+}
+
+.header-icon-box svg {
+  width: 22px;
+  height: 22px;
+}
+
+.header-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.usuarios-title {
+  margin: 0;
+  font-size: clamp(1.15rem, 2vw, 1.4rem); 
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.usuarios-subtitle {
+  margin: 2px 0 0 0;
+  font-size: clamp(0.8rem, 1.5vw, 0.875rem);
+  color: #64748b;
+  line-height: 1.4;
+}
+
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #0284c7;
+  color: #ffffff;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap; 
+  flex-shrink: 0; 
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(2, 132, 199, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0369a1;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-icon-plus {
+  width: 16px;
+  height: 16px;
+}
+
+/* Adaptación para pantallas pequeñas (móviles o ventanas chicas) */
+@media (max-width: 640px) {
+  .usuarios-header {
+    width: 94%;
+    flex-direction: column;
+    align-items: stretch;  
+    gap: 14px;
+  }
+
+  .btn-primary {
+    width: 100%; 
+    padding: 11px;
+  }
+}
+
+/* Grid adaptable para las 3 tarjetas */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto 6px auto;
+  box-sizing: border-box;
+}
+
+/* Tarjeta individual */
+.stat-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background-color: #ffffff;
+  padding: 18px 16px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  height: 62%;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card-blue {
+  background: linear-gradient(135deg, #ffffff 40%, #f0f9ff 100%);
+  border: 1px solid #e0f2fe;
+}
+
+.stat-card-green {
+  background: linear-gradient(135deg, #ffffff 40%, #f0fdf4 100%);
+  border: 1px solid #dcfce7;
+}
+
+.stat-card-gray {
+  background: linear-gradient(135deg, #ffffff 40%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+}
+
+/* Contenedor del icono circular */
+.stat-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.stat-icon-wrapper svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Colores de iconos */
+.stat-icon-blue {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.stat-icon-green {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.stat-icon-gray {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+/* Textos de la tarjeta */
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.stat-value {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.1;
+  margin: 4px 0;
+}
+
+
+/* Tendencia +1 este mes */
+.text-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.text-trend svg {
+  width: 13px;
+  height: 13px;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsivo para tablets y móviles */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    width: 94%;
+  }
+}
+
+/* Tarjeta contenedora blanca de la barra de filtros */
+.filter-bar-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 96%;
+  margin: 0 auto 15px auto;
+  padding: 10px 14px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+/* 1. Input de búsqueda izquierdo */
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.filter-search-input {
+  width: 100%;
+  padding: 9px 12px 9px 38px;
+  font-size: 0.875rem;
+  color: #1e293b;
+  background-color: #f8fafc;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.filter-search-input:focus {
+  background-color: #ffffff;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+}
+
+.filter-search-input::placeholder {
+  color: #94a3b8;
+}
+
+/* 2. Grupo derecho de controles */
+.filter-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Envoltorios de los selectores con iconos */
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select-prefix-icon {
+  position: absolute;
+  left: 11px;
+  width: 15px;
+  height: 15px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #ffffff;
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 8px 32px 8px 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px 14px;
+}
+
+.filter-select:focus {
+  border-color: #0284c7;
+}
+
+/* 3. Botón Limpiar */
+.btn-filter-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-filter-reset:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.reset-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+  .filter-bar-card {
+    flex-direction: column;
+    align-items: stretch;
+    width: 94%;
+  }
+
+  .filter-controls-group {
+    flex-wrap: wrap;
+  }
+
+  .select-wrapper,
+  .filter-select,
+  .btn-filter-reset {
+    flex: 1;
+  }
+}
+
+/* Tabla de usuarios*/
+.usuarios-table-container {
+  width: 100%;             
+  max-width: 1200px;
+  margin: 0 auto; 
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;      
+}
+
+.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.usuarios-table th,
+.usuarios-table td {
+  vertical-align: middle;
+  font-size: 15px;
+}
+
+.usuarios-table thead {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.usuarios-table th {
+  padding: 12px 16px;
+  font-weight: 600;
+}
+
+.usuarios-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.col-username {
+  font-weight: 500;
+  color: #0f172a;
+}
+
+/* Badge "Tú" */
+.badge-you {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  padding: 1px 7px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  line-height: 1.2;
+  user-select: none;
+}
+
+.col-name {
+  color: #334155;
+}
+
+.col-rut {
+    color: #334155;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Badges de Roles */
+/* Badge contenedor */
+.badge-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  width: fit-content;
+  user-select: none;
+}
+
+.badge-role-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* 1. Administrador (Azul) */
+.badge-role.administrador {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+/* 2. Operador (Gris / Pizarra) */
+.badge-role.operador {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+/* 3. Consultor (Ámbar / Naranja suave para notas) */
+.badge-role.consultor {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+/* Badges de Estado */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-status.active {
+  color: #16a34a;
+}
+
+.badge-status.inactive {
+  color: #64748b;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-dot.active {
+  background-color: #16a34a;
+}
+
+.status-dot.inactive {
+  background-color: #94a3b8;
+}
+
+/* Botones de Acción */
+.btn-action-edit {
+  background: none;
+  border: none;
+  color: #0284c7;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: 12px;
+}
+
+.btn-action-edit:hover {
+  text-decoration: underline;
+}
+
+.btn-action-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-action-toggle.deactivate {
+  color: #dc2626;
+}
+
+.btn-action-toggle.activate {
+  color: #16a34a;
+}
+
+.btn-action-toggle:hover {
+  text-decoration: underline;
+}
+
+/* Contenedor flex para alinear avatar y texto */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Círculo con iniciales */
+.user-avatar-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: #dbeafe; 
+  color: #1d4ed8;  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Badge de estado tipo píldora */
+.badge-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  width: fit-content;
+  user-select: none;
+}
+
+.badge-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Variante: Activo */
+.badge-status-pill.active {
+  background-color: #ecfdf5; 
+  color: #059669;
+  border: 1px solid #d1fae5;
+}
+
+.badge-status-pill.active .badge-status-dot {
+  background-color: #10b981;
+}
+
+/* Variante: Inactivo */
+.badge-status-pill.inactive {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.badge-status-pill.inactive .badge-status-dot {
+  background-color: #94a3b8;
+}
+
+/* Botón de acción con icono (Editar) */
+.btn-action-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #eff6ff; 
+  color: #2563eb;   
+  border: 1px solid #dbeafe;
+  cursor: pointer;
+  margin-right: 8px;
+  padding: 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-action-edit:hover {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.btn-action-edit svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Botón base de cambio de estado */
+.btn-action-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.btn-action-toggle svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Variante: Desactivar (Rojo suave) */
+.btn-action-toggle.deactivate {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.btn-action-toggle.deactivate:hover {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+/* Variante: Activar (Verde suave) */
+.btn-action-toggle.activate {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border-color: #bbf7d0;
+}
+
+.btn-action-toggle.activate:hover {
+  background-color: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+/* Botón toggle cuando está deshabilitado */
+.btn-action-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+
+/* Barra inferior de paginación */
+.pagination-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid #f1f5f9;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Texto informativo a la izquierda */
+.pagination-info {
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Grupo de botones a la derecha */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Flechas izquierda y derecha */
+.btn-pagination-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-pagination-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-pagination-arrow:hover:not(:disabled) {
+  background-color: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.btn-pagination-arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Botones con número */
+.btn-pagination-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-pagination-number:hover:not(.active) {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Página activa azul como en la imagen */
+.btn-pagination-number.active {
+  background-color: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+  box-shadow: 0 1px 2px rgba(2, 132, 199, 0.3);
+}
+
+/* Responsivo para móviles */
+@media (max-width: 640px) {
+  .pagination-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+  }
+}
+
