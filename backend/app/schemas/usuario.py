@@ -14,6 +14,7 @@ class UsuarioResponse(BaseModel):
     email: EmailStr
     rol: str
     activo: bool
+    primer_login: bool
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -24,7 +25,6 @@ class UsuarioCreate(BaseModel):
     rut: str = Field(..., min_length=8, max_length=20)
     username: str = Field(..., min_length=3, max_length=50)
     email: EmailStr
-    password: str = Field(..., min_length=8, max_length=100)
     rol: RolUsuario
 
 
@@ -39,3 +39,10 @@ class UsuarioUpdate(BaseModel):
 
 class UsuarioActivo(BaseModel):
     activo: bool
+
+class UsuarioPasswordTemporal(UsuarioResponse):
+    password_temporal: str
+
+class CambiarPasswordInicialRequest(BaseModel):
+    password_actual: str = Field(..., description="La contraseña temporal recibida")
+    nueva_password: str = Field(..., min_length=8, max_length=100, description="La nueva contraseña definitiva")

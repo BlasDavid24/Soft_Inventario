@@ -1,10 +1,12 @@
 from fastapi import Depends, HTTPException, status
 from sqlalchemy import select, or_
 from app.models.usuario import Usuario
-from app.schemas.usuario import UsuarioResponse, UsuarioCreate, UsuarioUpdate, UsuarioActivo
+from app.schemas.usuario import UsuarioResponse, UsuarioCreate, UsuarioUpdate, UsuarioActivo, UsuarioPasswordTemporal
 from fastapi import APIRouter, Query
-from app.security.password import hash_password
-from app.dependencies.auth import get_db, requerir_rol
+from app.security.password import hash_password, generar_password_temporal, verify_password
+from app.dependencies.auth import get_db, requerir_rol, obtener_usuario_actual
+from app.schemas.usuario import CambiarPasswordInicialRequest
+
 
 router = APIRouter(prefix="/usuarios", tags=["Usuario"])
 
@@ -59,7 +61,7 @@ def obtener_usuario(usuario_id: int, db=Depends(get_db),
     return usuario
 
 #POST crea un recurso
-@router.post("/crear", response_model=UsuarioResponse)
+@router.post("/crear", response_model=UsuarioPasswordTemporal)
 def crear_usuario(
     usuario_data: UsuarioCreate,
     db = Depends(get_db),
@@ -91,12 +93,15 @@ def crear_usuario(
         status_code=409,
         detail=errores
         )
+
+    password_temporal = generar_password_temporal() 
+    password_hasheada = hash_password(password_temporal)
     
     usuario = Usuario(
         nombre=usuario_data.nombre,
         apellido=usuario_data.apellido,
         rut=usuario_data.rut,
-        password_hash=hash_password(usuario_data.password),
+        password_hash=password_hasheada,
         username=usuario_data.username,
         rol=usuario_data.rol,
         email=usuario_data.email
@@ -107,7 +112,18 @@ def crear_usuario(
         db.commit()
         db.refresh(usuario)
         
-        return usuario
+        return {
+            "id": usuario.id,
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido,
+            'rut': usuario.rut,
+            "username": usuario.username,
+            "email": usuario.email,
+            "rol": usuario.rol,
+            "activo": usuario.activo,
+            "password_temporal": password_temporal
+             
+        }
 
     except Exception:
         db.rollback()
@@ -186,6 +202,37 @@ def actualizar_usuario(usuario_id: int, usuario_data: UsuarioUpdate , db = Depen
 
         return usuario
 
+    except Exception:
+        db.rollback()
+        raise
+
+@router.post("/cambiar-password-inicial")
+def cambiar_password_inicial(
+    datos: CambiarPasswordInicialRequest,
+    db = Depends(get_db),
+    usuario_actual: Usuario = Depends(obtener_usuario_actual)
+):
+    # Comprobar que la clave temporal ingresada coincida con la que tiene en la BD
+    if not verify_password(datos.password_actual, usuario_actual.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La contraseña temporal ingresada es incorrecta"
+        )
+
+    #Evitar que deje exactamente la misma clave temporal
+    if verify_password(datos.nueva_password, usuario_actual.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La nueva contraseña no puede ser idéntica a la clave temporal"
+        )
+
+    # 3. Actualizar la contraseña y desactivar primer_login
+    usuario_actual.password_hash = hash_password(datos.nueva_password)
+    usuario_actual.primer_login = False
+
+    try:
+        db.commit()
+        return {"mensaje": "Contraseña actualizada exitosamente"}
     except Exception:
         db.rollback()
         raise

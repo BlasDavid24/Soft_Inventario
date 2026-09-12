@@ -18,3 +18,4 @@ class Usuario(Base):
     activo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     fecha_creacion: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
     email: Mapped[str] = mapped_column(String(150), nullable=False, unique=True)
+    primer_login: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True) 

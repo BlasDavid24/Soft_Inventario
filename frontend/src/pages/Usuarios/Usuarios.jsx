@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { obtenerUsuariosApi, desactivarUsuarioApi } from '../api/usuario.api';
-import RoleBadge from '../components/RoleBadge';
-import StatusBadge from '../components/StatusBadge';
-import { obtenerIniciales } from '../utils/formatters';
-import '../styles/Usuario.css';
+import { useAuth } from '../../context/AuthContext';
+import { obtenerUsuariosApi, desactivarUsuarioApi } from '../../api/usuario.api';
+import RoleBadge from '../../components/RoleBadge';
+import StatusBadge from '../../components/StatusBadge';
+import { obtenerIniciales } from '../../utils/formatters';
+import '../../styles/Usuario/Usuario.css';
+import { useNavigate } from 'react-router-dom';
+import ConfirmModal from '../../components/ConfirmModal';
+
 
 export default function Usuarios() {
     const [usuarios, setUsuarios] = useState([]);
@@ -13,6 +16,8 @@ export default function Usuarios() {
     const [busqueda, setBusqueda] = useState('');
     const [filtroRol, setFiltroRol] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('');
+    const navigate = useNavigate();
+    const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
     // Control de paginación (3 registros por página)
     const [paginaActual, setPaginaActual] = useState(1);
@@ -161,7 +166,7 @@ export default function Usuarios() {
                     </div>
                 </div>
 
-                <button className="btn-primary">
+                <button className="btn-primary" onClick={() => navigate('/usuarios/nuevo')}>
                     <svg
                         viewBox="0 0 24 24"
                         fill="none"
@@ -392,7 +397,7 @@ export default function Usuarios() {
                                             <button
                                                 className="btn-action-edit"
                                                 title="Editar usuario"
-                                                onClick={() => console.log('Editar usuario:', u.id)}
+                                                onClick={() => navigate(`/usuarios/actualizar/${u.id}`)}
                                             >
                                                 <svg
                                                     viewBox="0 0 24 24"
@@ -410,7 +415,7 @@ export default function Usuarios() {
                                             {/* Botón Activar / Desactivar */}
                                             <button
                                                 className={`btn-action-toggle ${u.activo ? 'deactivate' : 'activate'}`}
-                                                onClick={() => handleToggleEstado(u.id, u.activo, u.username)}
+                                                onClick={() => setUsuarioSeleccionado(u)}
                                                 disabled={esPropioUsuario}
                                                 title={
                                                     esPropioUsuario
@@ -499,6 +504,30 @@ export default function Usuarios() {
                     </div>
                 </div>
             </div>
+
+            {/*Modal flotante de confirmación */}
+            <ConfirmModal
+                isOpen={usuarioSeleccionado !== null}
+                title={`¿Estás seguro de ${usuarioSeleccionado?.activo ? 'desactivar' : 'activar'} a este usuario?`}
+                description={`El usuario "${usuarioSeleccionado?.username}" ${usuarioSeleccionado?.activo
+                        ? 'perderá el acceso al sistema inmediatamente.'
+                        : 'volverá a tener acceso al sistema.'
+                    }`}
+                confirmText={usuarioSeleccionado?.activo ? 'Sí, desactivar' : 'Sí, activar'}
+                cancelText="Cancelar"
+                variant={usuarioSeleccionado?.activo ? 'danger' : 'primary'}
+                onConfirm={() => {
+                    if (usuarioSeleccionado) {
+                        handleToggleEstado(
+                            usuarioSeleccionado.id,
+                            usuarioSeleccionado.activo,
+                            usuarioSeleccionado.username
+                        );
+                    }
+                    setUsuarioSeleccionado(null); 
+                }}
+                onCancel={() => setUsuarioSeleccionado(null)}
+            />
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
@@ -17,8 +17,14 @@ export default function Login() {
     setCargando(true);
 
     try {
-      await login(username, password);
-      navigate('/');
+      const data = await login(username, password);
+
+      // Si es el primer inicio de sesión, redirige a cambiar la clave temporal
+      if (data?.primer_login) {
+        navigate('/cambiar-password');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       if (err.response && err.response.data?.detail) {
         setError(err.response.data.detail);

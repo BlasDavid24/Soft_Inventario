@@ -25,24 +25,34 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
 
-    const { access_token, nombre, rol, username: userLogin } = respuesta.data;
+    const { access_token, nombre, rol, username: userLogin, primer_login } = respuesta.data;
 
-    //Guardar token
+    // Guardar token
     localStorage.setItem('token', access_token);
     setToken(access_token);
 
-    //Armar y guardar datos del usuario
+    // Armar y guardar datos del usuario con su estado de primer_login
     const datosUsuario = {
-
       nombre: nombre || userLogin,
       rol: rol || 'Usuario',
       username: userLogin,
+      primer_login: primer_login ?? false,
     };
 
     localStorage.setItem('usuario', JSON.stringify(datosUsuario));
     setUsuario(datosUsuario);
 
     return respuesta.data;
+  };
+
+  // Función para marcar primer_login como false tras actualizar la clave
+  const completarPrimerLogin = () => {
+    setUsuario((prev) => {
+      if (!prev) return null;
+      const actualizado = { ...prev, primer_login: false };
+      localStorage.setItem('usuario', JSON.stringify(actualizado));
+      return actualizado;
+    });
   };
 
   // Función logout: limpia token y usuario
@@ -60,6 +70,7 @@ export function AuthProvider({ children }) {
         usuario,
         login,
         logout,
+        completarPrimerLogin,
         estaAutenticado: !!token,
         cargando,
       }}

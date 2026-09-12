@@ -21,7 +21,7 @@ def login(
     resultado = db.execute(consulta)
     usuario = resultado.scalar_one_or_none()
 
-    #Validar que exista y que la contraseña coincida con el hash
+    # Validar que exista y que la contraseña coincida con el hash
     if usuario is None or not verify_password(form_data.password, usuario.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -29,27 +29,29 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    #Validar que el usuario esté activo en el sistema
+    # Validar que el usuario esté activo en el sistema
     if not usuario.activo:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="El usuario se encuentra inactivo"
         )
 
-    #Generar el token con los datos clave dentro del payload
+    # Generar el token con los datos clave dentro del payload
     token = crear_token_acceso(
         datos={
             "sub": usuario.username,
             "id": usuario.id,
-            "rol": usuario.rol
+            "rol": usuario.rol,
+            "primer_login": usuario.primer_login
         }
     )
 
-    #Responder con el token y datos informativos
+    # Responder con el token y datos informativos
     return {
         "access_token": token,
         "token_type": "bearer",
         "username": usuario.username,
         "rol": usuario.rol,
-        "nombre": f"{usuario.nombre} {usuario.apellido}"
+        "nombre": f"{usuario.nombre} {usuario.apellido}",
+        "primer_login": usuario.primer_login
     }

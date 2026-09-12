@@ -11,6 +11,15 @@ export const obtenerUsuariosApi = async (params = {}) => {
 };
 
 /**
+ * Obtiene un usuario específico por su identificador.
+ * @param {number|string} id - Identificador único del usuario
+ */
+export const obtenerUsuarioPorIdApi = async (id) => {
+  const respuesta = await api.get(`/usuarios/filtrar ID/${id}`);
+  return respuesta.data;
+};
+
+/**
  * Cambia el estado de activación de un usuario.
  * @param {number} id - ID del usuario
  */
@@ -39,4 +48,13 @@ export const actualizarUsuarioApi = async (id, datosUsuarioActu) => {
   return respuesta.data;
 };
 
-
+/**
+ * Envía la contraseña temporal y la nueva contraseña definitiva para actualizar
+ * las credenciales en el primer inicio de sesión.
+ *
+ * @param {Object} datos - Datos para la actualización de credenciales.
+ */
+export const cambiarPasswordInicialApi = async (datos) => {
+  const res = await api.post('/usuarios/cambiar-password-inicial', datos);
+  return res.data;
+};
