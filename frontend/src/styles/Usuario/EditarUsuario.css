@@ -1,41 +1,8 @@
 
 .edit-user-page {
-  margin: 32px auto;
   padding: 0 20px;
   box-sizing: border-box;
   width: 100%;
-}
-
-/*Texto inicial con flecha para retrocer*/
-.edit-user-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.btn-back {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  background-color: #e0f2fe;
-  border: 1px solid #e0f2fe;
-  border-radius: 10px;
-  cursor: pointer;
-  color: #0284c7;
-  transition: all 0.15s ease;
-}
-
-.btn-back:hover {
-  background-color: #f1f5f9;
-  color: #0f172a;
-}
-
-.btn-back svg {
-  width: 20px;
-  height: 20px;
 }
 
 .edit-user-title {
@@ -45,11 +12,6 @@
   color: #0f172a;
 }
 
-.edit-user-subtitle {
-  margin: 4px 0 0 0;
-  font-size: 0.875rem;
-  color: #64748b;
-}
 
 .edit-user-alert {
   background-color: #fef2f2;

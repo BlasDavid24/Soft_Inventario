@@ -1,0 +1,341 @@
+/* Contenedor principal de la tabla */
+.usuarios-table-container,
+.data-table-container {
+  width: 96%;
+  max-width: 1200px;
+  margin: 0 auto auto;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  overflow-x: auto; 
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tabla base */
+.usuarios-table,
+.data-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+/* Encabezado */
+.usuarios-table thead,
+.data-table thead {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.usuarios-table th,
+.data-table th {
+  padding: 14px 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Filas del cuerpo */
+.usuarios-table tbody tr,
+.data-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.15s ease;
+}
+
+.usuarios-table tbody tr:hover,
+.data-table tbody tr:hover {
+  background-color: #fafbfc;
+}
+
+.usuarios-table tbody tr:last-child,
+.data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.usuarios-table td,
+.data-table td {
+  padding: 16px 20px;
+  vertical-align: middle;
+  font-size: 0.875rem;
+  color: #334155;
+  white-space: nowrap; 
+}
+
+/* 1. Celda Usuario (Avatar + Username) */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #dbeafe;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  user-select: none;
+  letter-spacing: 0.5px;
+}
+
+.avatar-blue {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.avatar-purple {
+  background-color: #f3e8ff;
+  color: #9333ea;
+}
+
+.avatar-gray {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.col-username-text {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Badge "Tú" */
+.badge-you {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  padding: 1px 7px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  line-height: 1.2;
+}
+
+/* 2. Nombre y RUT */
+.col-name {
+  color: #334155;
+  font-weight: 500;
+}
+
+.col-rut {
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 3. Badges de Roles */
+.badge-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.badge-role-blue {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.badge-role-gray {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.badge-role svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* 4. Badges de Estado */
+.badge-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.badge-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.badge-status-pill.active {
+  background-color: #ecfdf5;
+  color: #15803d;
+}
+
+.badge-status-pill.active .badge-status-dot {
+  background-color: #16a34a;
+}
+
+.badge-status-pill.inactive {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.badge-status-pill.inactive .badge-status-dot {
+  background-color: #94a3b8;
+}
+
+/* 5. Acciones a la derecha */
+.actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-action-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #dbeafe;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-action-edit:hover {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.btn-action-edit svg {
+  width: 15px;
+  height: 15px;
+}
+
+.btn-action-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  margin-left: 6px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+
+.btn-action-toggle svg {
+  width: 14px;
+  height: 14px;
+}
+
+.btn-action-toggle.deactivate {
+  background-color: #fef2f2;
+  color: #ef4444;
+  border-color: #fee2e2;
+}
+
+.btn-action-toggle.deactivate:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.btn-action-toggle.activate {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border-color: #dcfce7;
+}
+
+.btn-action-toggle.activate:hover {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.btn-action-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Tablets medianas (<= 1024px) */
+@media (max-width: 1024px) {
+  .usuarios-table th,
+  .data-table th,
+  .usuarios-table td,
+  .data-table td {
+    padding: 14px 14px;
+  }
+}
+
+/* Tablets pequeñas y móviles (<= 768px) */
+@media (max-width: 768px) {
+  .usuarios-table-container,
+  .data-table-container {
+    width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .usuarios-table th,
+  .data-table th,
+  .usuarios-table td,
+  .data-table td {
+    padding: 12px 10px;
+    font-size: 0.8125rem;
+  }
+
+  .user-avatar-badge {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  /* Oculta la columna RUT en pantallas estrechas para no saturar */
+  .usuarios-table th:nth-child(3),
+  .usuarios-table td:nth-child(3),
+  .data-table th:nth-child(3),
+  .data-table td:nth-child(3) {
+    display: none;
+  }
+}
+
+/* Móviles compactos (<= 480px) */
+@media (max-width: 480px) {
+  /* En móviles muy chicos dejamos solo el ícono en el botón de estado */
+  .btn-action-toggle span {
+    display: none;
+  }
+
+  .btn-action-toggle {
+    padding: 0 8px;
+    margin-left: 2px;
+  }
+}

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { crearUsuarioApi } from '../../api/usuario.api';
 import '../../styles/Usuario/CrearUsuario.css';
 import ConfirmModal from '../../components/ConfirmModal';
+import PageHeader from '../../components/PageHeader';
 
 export default function CrearUsuario() {
     const navigate = useNavigate();
@@ -72,27 +73,12 @@ export default function CrearUsuario() {
     return (
         <div className="usuarios-container">
             {/* 1. Encabezado */}
-            <div className="usuarios-header">
-                <div className="usuarios-header-left">
-                    <button
-                        type="button"
-                        className="btn-back"
-                        onClick={() => setMostrarModal(true)}
-                        title="Volver al listado"
-                    >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="19" y1="12" x2="5" y2="12" />
-                            <polyline points="12 19 5 12 12 5" />
-                        </svg>
-                    </button>
-                    <div className="header-text-group">
-                        <h1 className="usuarios-title">Crear Nuevo Usuario</h1>
-                        <p className="usuarios-subtitle">
-                            Ingresa los datos del colaborador para registrarlo en el sistema.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <PageHeader
+                rutaVolver={() => setMostrarModal(true)}
+                titulo="Crear nuevo usuario"
+                subtitulo="Completa la informacion para asignar un nuevo usuario al sistema"
+            >
+            </PageHeader>
 
             {/* Columnas */}
             <div className="create-user-layout">

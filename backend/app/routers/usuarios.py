@@ -121,6 +121,7 @@ def crear_usuario(
             "email": usuario.email,
             "rol": usuario.rol,
             "activo": usuario.activo,
+            "primer_login": usuario.primer_login,
             "password_temporal": password_temporal
              
         }

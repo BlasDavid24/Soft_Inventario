@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { actualizarUsuarioApi, obtenerUsuarioPorIdApi } from '../../api/usuario.api';
 import ConfirmModal from '../../components/ConfirmModal';
 import '../../styles/Usuario/EditarUsuario.css';
+import PageHeader from '../../components/PageHeader';
 
 export default function EditarUsuario() {
     const { id } = useParams();
@@ -73,23 +74,12 @@ export default function EditarUsuario() {
 
     return (
         <div className="edit-user-page">
-            <div className="edit-user-header">
-                <button
-                    type="button"
-                    className="btn-back"
-                    onClick={() => setMostrarModal(true)}
-                    title="Volver"
-                >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12" />
-                        <polyline points="12 19 5 12 12 5" />
-                    </svg>
-                </button>
-                <div>
-                    <h2 className="edit-user-title">Editar Usuario</h2>
-                    <p className="edit-user-subtitle">Modifica los datos del usuario seleccionado.</p>
-                </div>
-            </div>
+            <PageHeader
+                rutaVolver={() => setMostrarModal(true)}
+                titulo="Editar usuario"
+                subtitulo="Modifica la infromación y los permisos del usuario seleccionado"
+            >
+            </PageHeader>
 
             {error && <div className="edit-user-alert">{error}</div>}
 

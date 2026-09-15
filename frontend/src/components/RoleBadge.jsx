@@ -4,7 +4,7 @@ export default function RoleBadge({ rol }) {
   // Caso 1: Administrador (Corona)
   if (rolNormalizado.includes('admin')) {
     return (
-      <span className="badge-role administrador">
+      <span className="badge-role badge-role-blue">
         <svg className="badge-role-icon" viewBox="0 0 24 24" fill="currentColor">
           <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5m14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
         </svg>
@@ -16,7 +16,7 @@ export default function RoleBadge({ rol }) {
   // Caso 2: Consultor (Icono de documento/notas)
   if (rolNormalizado.includes('consultor')) {
     return (
-      <span className="badge-role consultor">
+      <span className="badge-role badge-role-gray">
         <svg
           className="badge-role-icon"
           viewBox="0 0 24 24"
@@ -39,7 +39,7 @@ export default function RoleBadge({ rol }) {
 
   // Caso 3: Operador u otros (Icono de usuario)
   return (
-    <span className="badge-role operador">
+    <span className="badge-role badge-role-gray">
       <svg
         className="badge-role-icon"
         viewBox="0 0 24 24"

@@ -8,6 +8,7 @@ import Usuarios from './pages/Usuarios/Usuarios';
 import CrearUsuario from './pages/Usuarios/CrearUsuario';
 import EditarUsuario from './pages/Usuarios/EditarUsuario';
 import CambiarPassword from './pages/Auth/CambiarPassword';
+import Proveedores from './pages/Proveedores/Proveedores'
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="usuarios/nuevo" element={<CrearUsuario />} />
             <Route path="usuarios/actualizar/:id" element={<EditarUsuario />} />
+            <Route path="proveedores" element={<Proveedores />} />
           </Route>
 
           {/* Redirección por defecto */}

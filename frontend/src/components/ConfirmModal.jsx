@@ -1,4 +1,4 @@
-import React from 'react';
+
 import '../styles/Usuario/CrearUsuario.css'; // o donde tengas centralizados tus estilos de modales
 
 export default function ConfirmModal({

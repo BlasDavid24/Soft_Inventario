@@ -1,0 +1,169 @@
+/* Tarjeta contenedora blanca de la barra de filtros */
+.filter-bar-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 96%;
+  margin: 0 auto 10px auto;
+  padding: 10px 14px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+/* 1. Input de búsqueda izquierdo */
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.filter-search-input {
+  width: 100%;
+  height: 38px; /* Altura estandarizada */
+  padding: 0 12px 0 36px;
+  font-size: 0.875rem;
+  color: #1e293b;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.filter-search-input:focus {
+  background-color: #ffffff;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+}
+
+.filter-search-input::placeholder {
+  color: #94a3b8;
+}
+
+/* 2. Grupo derecho de controles */
+.filter-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Envoltorios de los selectores */
+.select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.select-prefix-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.select-prefix-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.filter-select {
+  height: 38px; /* Altura estandarizada */
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #ffffff;
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0 32px 0 34px; /* Relleno lateral limpio */
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  transition: border-color 0.2s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 13px 13px;
+}
+
+.filter-select:focus {
+  border-color: #0284c7;
+}
+
+/* 3. Botón Limpiar */
+.btn-filter-reset {
+  height: 38px; /* Altura estandarizada */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 14px;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-filter-reset:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.reset-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .filter-bar-card {
+    flex-direction: column;
+    align-items: stretch;
+    width: 94%;
+  }
+
+  .filter-controls-group {
+    flex-wrap: wrap;
+  }
+
+  .select-wrapper,
+  .filter-select,
+  .btn-filter-reset {
+    flex: 1;
+  }
+}
