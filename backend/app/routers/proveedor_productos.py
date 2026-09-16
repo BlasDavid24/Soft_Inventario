@@ -11,9 +11,22 @@ from app.models.usuario import Usuario
 
 router = APIRouter(prefix="/proveedor-producto", tags=["Proveedor Producto"])
 
-# GET solicitar/obtener recursos (con filtros opcionales por producto o proveedor)
 @router.get("/filtrar", response_model=list[ProvProducResponse])
 def obtener_proveedor_productos(
+    db = Depends(get_db),
+    usuario_actual: Usuario = Depends(obtener_usuario_actual)
+):
+    
+    consulta = select(ProveedorProducto)
+        
+    resultado = db.execute(consulta)
+    proveedor_producto = resultado.scalars().all()
+
+    return proveedor_producto
+
+# GET solicitar/obtener recursos (con filtros opcionales por producto o proveedor)
+@router.get("/filtrar ID", response_model=list[ProvProducResponse])
+def obtener_proveedor_producto(
     producto_id: int | None = Query(default=None, description="Filtrar por ID de producto"),
     proveedor_id: int | None = Query(default=None, description="Filtrar por ID de proveedor"),
     db = Depends(get_db),
@@ -45,29 +58,6 @@ def obtener_proveedor_productos(
     provee_produc = resultado.scalars().unique().all()
 
     return provee_produc
-
-#GET solicitar/obtener un recurso por id
-@router.get("/filtrar ID/{prov_produc_id}", response_model=ProvProducResponse)
-def obtener_proveedor_producto(
-    prov_produc_id: int, 
-    db=Depends(get_db),
-    usuario_actual: Usuario = Depends(obtener_usuario_actual)
-):
-    consulta = select(ProveedorProducto).options(
-            joinedload(ProveedorProducto.producto),
-            joinedload(ProveedorProducto.proveedor)
-        ).where(ProveedorProducto.id == prov_produc_id)
-    resultado = db.execute(consulta)
-    proveedor = resultado.scalar_one_or_none()
-
-
-    if proveedor is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Datos no encontrados"
-        )
-    
-    return proveedor
 
 #POST crea un recurso
 @router.post("/crear", response_model=ProvProducResponse)

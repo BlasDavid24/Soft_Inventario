@@ -34,6 +34,12 @@
   border: 1px solid #e2e8f0;
 }
 
+.stat-card-purple {
+  background: linear-gradient(135deg, #ffffff 40%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+}
+
+
 /* Contenedor del icono circular */
 .stat-icon-wrapper {
   display: flex;
@@ -66,6 +72,11 @@
   color: #64748b;
 }
 
+.stat-icon-purple {
+  background-color: #f3e8ff;
+  color: #7c3aed;
+}
+
 /* Textos de la tarjeta */
 .stat-content {
   display: flex;
@@ -80,10 +91,18 @@
   white-space: nowrap;
 }
 
-.stat-value {
+.stat-value-defect {
   font-size: 1.625rem;
   font-weight: 700;
   color: #0f172a;
+  line-height: 1.1;
+  margin: 4px 0;
+}
+
+.stat-value-purple {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: #7c3aed;
   line-height: 1.1;
   margin: 4px 0;
 }

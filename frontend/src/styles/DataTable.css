@@ -284,6 +284,32 @@
   text-align: right;
 }
 
+/* Botón de acción Ver (Ojo) */
+.btn-action-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #eff6ff; 
+  color: #2563eb;
+  border: 1px solid #dbeafe;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-action-view:hover {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.btn-action-view svg {
+  width: 15px;
+  height: 15px;
+}
+
 /* Tablets medianas (<= 1024px) */
 @media (max-width: 1024px) {
   .usuarios-table th,

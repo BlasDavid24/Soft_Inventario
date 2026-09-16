@@ -127,7 +127,7 @@ export default function Usuarios() {
         setFiltroEstado('');
     };
 
-    // Métricas calculadas en memoria
+    // Métricas calculadas en memoria para las tarjetas 
     const totalUsuarios = usuarios.length;
     const usuariosActivos = usuarios.filter((u) => u.activo).length;
     const usuariosInactivos = totalUsuarios - usuariosActivos;

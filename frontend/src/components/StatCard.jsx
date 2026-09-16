@@ -6,6 +6,7 @@ export default function StatCard({
     subtexto,
     subtextoVerde = false,
     color = 'blue',
+    colorsubtext = 'blue',
     icono,
 }) {
     return (
@@ -16,7 +17,7 @@ export default function StatCard({
 
             <div className="stat-content">
                 <span className="stat-label">{titulo}</span>
-                <span className="stat-value">{valor}</span>
+                <span className={`stat-value-${colorsubtext}`}>{valor}</span>
                 {subtexto && (
                     <span className={`stat-subtext ${subtextoVerde ? 'text-trend' : ''}`}>
                         {subtexto}
