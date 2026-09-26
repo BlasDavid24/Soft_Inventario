@@ -10,19 +10,14 @@ router = APIRouter(prefix="/categorias", tags=["Categoria"])
 
 #CATEGORIA
 
-#GET solicta/obtiene un recurso por nombre
-@router.get("/filtar", response_model=list[CategoriaResponse])
+#GET solicta/obtiene la informacion de todas las categorias
+@router.get("/filtrar", response_model=list[CategoriaResponse])
 def obtener_categorias(
-    buscar: str | None = Query(default=None, description="Buscar por nombre"),
     db = Depends(get_db),
     usuario_actual: Usuario = Depends(obtener_usuario_actual)
 ):
     
     consulta = select(Categoria)
-
-    if buscar:
-        termino = f"%{buscar.strip()}%"
-        consulta = consulta.where(Categoria.nombre.ilike(termino))
         
     resultado = db.execute(consulta)
     categoria = resultado.scalars().all()

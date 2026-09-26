@@ -9,7 +9,6 @@ import FilterBar, { FilterSelect } from '../../components/FilterBar';
 import DataTable from '../../components/DataTable';
 import ConfirmModal from '../../components/ConfirmModal'
 import ModalNuevoProveedor from './CrearProveedor';
-import ModalDetalleProveedor from './DetalleProveedor';
 
 
 export default function Proveedores() {
@@ -123,16 +122,15 @@ export default function Proveedores() {
   const handleToggleEstado = async (id, estadoActual) => {
     const nuevoEstado = !estadoActual;
     try {
-      if (typeof desactivarProveedorApi === 'function') {
-        await desactivarProveedorApi(id, nuevoEstado);
-      }
+      
+      await desactivarProveedorApi(id, nuevoEstado);
 
       setProveedores((prev) =>
         prev.map((p) => (p.id === id ? { ...p, activo: nuevoEstado } : p))
       );
     } catch (err) {
-      console.error('Error al cambiar el estado del proveedor:', err);
-      alert('No se pudo cambiar el estado del proveedor. Intente nuevamente.');
+      console.error('Error detallado al desactivar proveedor:', err.response?.data || err);
+      alert(err.response?.data?.detail || 'Error al conectar con el servidor.');
     }
   };
 
@@ -310,24 +308,6 @@ export default function Proveedores() {
                 <div className="actions-cell">
                   <button
                     type="button"
-                    className="btn-action-edit"
-                    title="Editar proveedor"
-                    onClick={() => navigate(`/proveedores/actualizar/${prov.id}`)}
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
                     className={`btn-action-toggle ${prov.activo ? 'deactivate' : 'activate'}`}
                     onClick={() => setProveedorSeleccionado(prov)}
                     title={prov.activo ? 'Desactivar proveedor' : 'Activar proveedor'}
@@ -363,7 +343,7 @@ export default function Proveedores() {
                     type="button"
                     className="btn-action-view"
                     title="Ver detalle del proveedor"
-                    onClick={() => setProveedorDetalle(prov)}
+                    onClick={() => navigate(`/proveedores/detalles/${prov.id}`)}
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -410,13 +390,6 @@ export default function Proveedores() {
         onProveedorCreado={(nuevoProveedor) => {
           setProveedores((prev) => [nuevoProveedor, ...prev]);
         }}
-      />
-
-      {/* Modal flotante de detalle */}
-      <ModalDetalleProveedor
-        isOpen={proveedorDetalle !== null}
-        onClose={() => setProveedorDetalle(null)}
-        proveedor={proveedorDetalle}
       />
     </div>
   );

@@ -17,7 +17,7 @@ export default function StatCard({
 
             <div className="stat-content">
                 <span className="stat-label">{titulo}</span>
-                <span className={`stat-value-${colorsubtext}`}>{valor}</span>
+                <span className={`stat-value stat-value-${colorsubtext}`}>{valor}</span>
                 {subtexto && (
                     <span className={`stat-subtext ${subtextoVerde ? 'text-trend' : ''}`}>
                         {subtexto}

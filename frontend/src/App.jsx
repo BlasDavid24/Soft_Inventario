@@ -8,7 +8,10 @@ import Usuarios from './pages/Usuarios/Usuarios';
 import CrearUsuario from './pages/Usuarios/CrearUsuario';
 import EditarUsuario from './pages/Usuarios/EditarUsuario';
 import CambiarPassword from './pages/Auth/CambiarPassword';
-import Proveedores from './pages/Proveedores/Proveedores'
+import Proveedores from './pages/Proveedores/Proveedores';
+import DetalleProveedor from './pages/Proveedores/DetalleProveedor'
+import EditarProveedor from './pages/Proveedores/EditarProveedor';
+import Productos from './pages/Productos/Productos';
 
 export default function App() {
   return (
@@ -42,6 +45,9 @@ export default function App() {
             <Route path="usuarios/nuevo" element={<CrearUsuario />} />
             <Route path="usuarios/actualizar/:id" element={<EditarUsuario />} />
             <Route path="proveedores" element={<Proveedores />} />
+            <Route path="proveedores/detalles/:id" element={<DetalleProveedor />} />
+            <Route path="proveedores/actualizar/:id" element={<EditarProveedor />} />
+            <Route path="productos" element={<Productos />} />
           </Route>
 
           {/* Redirección por defecto */}

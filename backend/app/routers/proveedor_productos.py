@@ -8,16 +8,21 @@ from sqlalchemy.orm import joinedload
 from app.schemas.proveedor_producto import ProvProducResponse, ProvProducCreate, ProvProducUpdate
 from fastapi import APIRouter, Query
 from app.models.usuario import Usuario
+from typing import Optional
 
 router = APIRouter(prefix="/proveedor-producto", tags=["Proveedor Producto"])
 
 @router.get("/filtrar", response_model=list[ProvProducResponse])
 def obtener_proveedor_productos(
+    proveedor_id: Optional[int] = None,
     db = Depends(get_db),
     usuario_actual: Usuario = Depends(obtener_usuario_actual)
 ):
     
     consulta = select(ProveedorProducto)
+
+    if proveedor_id is not None:
+        consulta = consulta.where(ProveedorProducto.proveedor_id == proveedor_id)
         
     resultado = db.execute(consulta)
     proveedor_producto = resultado.scalars().all()
@@ -171,7 +176,7 @@ def actualizar_proveedor_producto(
 def eliminar_proveedor_producto(
         prov_produc_id: int,
         db=Depends(get_db),
-        usuario_admin: Usuario = Depends(requerir_rol(["ADMINISTRADOR"]))
+        usuario_admin: Usuario = Depends(requerir_rol(["ENCARGADO"]))
     ):
 
     consulta = select(ProveedorProducto).where(ProveedorProducto.id == prov_produc_id)

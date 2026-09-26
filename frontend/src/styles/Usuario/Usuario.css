@@ -28,17 +28,12 @@
 /* Grid adaptable para las 3 tarjetas */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   width: 90%;
   max-width: 1100px;
   margin: 0 auto 6px auto;
   box-sizing: border-box;
-}
-
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
 /* Responsivo para tablets y móviles */

@@ -35,10 +35,14 @@
 }
 
 .stat-card-purple {
-  background: linear-gradient(135deg, #ffffff 40%, #f8fafc 100%);
+  background: linear-gradient(135deg, #ffffff 40%, #d7caf093 100%);
   border: 1px solid #e2e8f0;
 }
 
+.stat-card-red {
+  background: linear-gradient(135deg, #ffffff 40%, #fef2f2 100%);
+  border: 1px solid #fee2e2;
+}
 
 /* Contenedor del icono circular */
 .stat-icon-wrapper {
@@ -77,6 +81,10 @@
   color: #7c3aed;
 }
 
+.stat-icon-red {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
 /* Textos de la tarjeta */
 .stat-content {
   display: flex;
@@ -91,20 +99,22 @@
   white-space: nowrap;
 }
 
-.stat-value-defect {
+.stat-value {
   font-size: 1.625rem;
   font-weight: 700;
-  color: #0f172a;
   line-height: 1.1;
   margin: 4px 0;
 }
+.stat-value-defect {
+  color: #0f172a;
+}
 
 .stat-value-purple {
-  font-size: 1.625rem;
-  font-weight: 700;
   color: #7c3aed;
-  line-height: 1.1;
-  margin: 4px 0;
+}
+
+.stat-value-red {
+  color: #ef4444;
 }
 
 .stat-subtext {

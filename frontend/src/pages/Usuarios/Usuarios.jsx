@@ -194,6 +194,7 @@ export default function Usuarios() {
             <div className="stats-grid">
                 {/* Card 1: Total */}
                 <StatCard
+                    colorsubtext="defect"
                     titulo="Total de Usuarios"
                     valor={totalUsuarios}
                     subtexto="↗ +1 este mes"
@@ -211,6 +212,7 @@ export default function Usuarios() {
 
                 {/* Card 2: Activos */}
                 <StatCard
+                    colorsubtext="defect"
                     color="green"
                     titulo="Usuarios Activos"
                     valor={usuariosActivos}
@@ -225,6 +227,7 @@ export default function Usuarios() {
 
                 {/* Card 3: Inactivos */}
                 <StatCard
+                    colorsubtext="defect"
                     color="gray"
                     titulo="Usuarios Inactivos"
                     valor={usuariosInactivos}

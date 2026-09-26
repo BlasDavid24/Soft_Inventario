@@ -1,268 +1,235 @@
-/* Fondo oscuro translúcido con desenfoque */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(3px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 16px;
-}
-
-/* Contenedor del Modal */
-.modal-detalle-container {
-  background: #ffffff;
-  width: 100%;
-  max-width: 640px;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
+/*Diseño principal de pagina*/
+.detalle-page-container {
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  animation: modalFadeIn 0.2s ease-out;
 }
 
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.detalle-page-loading {
+  text-align: center;
+  padding: 60px 0;
+  font-size: 0.95rem;
+  color: #64748b;
 }
 
-/* Cabecera */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 20px 24px;
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #334155;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.btn-secondary svg,
+.btn-primary svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Grilla principal de 2 columnas*/
+.detalle-layout-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.3fr;
+  gap: 24px;
+  align-items: start;
+  padding: 0 10px 10px 10px;
+}
+
+.detalle-card-panel {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.panel-card-header {
+  padding: 18px 24px;
   border-bottom: 1px solid #f1f5f9;
+  background-color: #ffffff;
 }
 
-.modal-header-left {
+.header-title-flex {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-/* Círculo suave para el ícono del ojo */
-.modal-icon-badge {
+.panel-icon-circle {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
-  background-color: #dbeafe; /* Azul claro suave */
-  color: #2563eb;           /* Azul principal */
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.modal-icon-badge svg {
-  width: 20px;
-  height: 20px;
+.panel-icon-circle.blue {
+  background-color: #eff6ff;
+  color: #2563eb;
 }
 
-.modal-title-group h3 {
+.panel-icon-circle.purple {
+  background-color: #faf5ff;
+  color: #9333ea;
+}
+
+.panel-icon-circle svg {
+  width: 22px;
+  height: 22px;
+}
+
+.header-title-flex h3 {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #0f172a;
 }
 
-.modal-title-group p {
+.header-title-flex p {
   margin: 3px 0 0 0;
   font-size: 0.8125rem;
   color: #64748b;
 }
 
-/* Botón X de cierre */
-.btn-close-modal {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  line-height: 1;
-  color: #94a3b8;
-  cursor: pointer;
-  padding: 0;
-  transition: color 0.15s;
-}
-
-.btn-close-modal:hover {
-  color: #334155;
-}
-
-/* Cuerpo con scroll si hay muchos productos */
-.modal-detalle-body {
+.panel-content-body {
   padding: 20px 24px;
-  max-height: 68vh;
-  overflow-y: auto;
 }
 
-/* Grilla de ficha de información */
-.detalle-info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px 20px;
-  background-color: #f8fafc;
-  padding: 16px;
-  border-radius: 10px;
-  border: 1px solid #edf2f7;
+.panel-table-wrapper {
+  overflow-x: auto;
 }
 
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.info-item.full-col {
-  grid-column: span 2;
-}
-
-.info-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #64748b;
-  letter-spacing: 0.04em;
-}
-
-.info-value {
-  font-size: 0.875rem;
-  color: #0f172a;
-  word-break: break-word;
-}
-
-.info-value.font-bold {
-  font-weight: 600;
-  color: #1e293b;
-}
-
-.detalle-divider {
-  height: 1px;
-  background-color: #e2e8f0;
-  margin: 20px 0;
-}
-
-/* Sección de productos suministrados */
-.detalle-productos-header h4 {
-  margin: 0 0 12px 0;
-  font-size: 0.925rem;
-  font-weight: 700;
-  color: #1e293b;
-}
-
-/* Mensajes de estado (cargando o vacío) */
-.modal-loading-text,
-.modal-empty-text {
-  text-align: center;
-  padding: 28px 16px;
-  color: #64748b;
-  font-size: 0.84rem;
-  background-color: #f8fafc;
-  border-radius: 8px;
-  border: 1px dashed #cbd5e1;
-}
-
-/* Tabla interna de productos */
-.modal-tabla-wrapper {
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.modal-tabla {
+/* Tabla Vertical Izquierda (Ficha técnica) */
+.tabla-vertical-info {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.84rem;
+  font-size: 0.875rem;
+}
+
+.tabla-vertical-info th {
+  width: 36%;
+  padding: 14px 24px;
   text-align: left;
-}
-
-.modal-tabla thead {
-  background-color: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.modal-tabla th {
-  padding: 10px 14px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.modal-tabla td {
-  padding: 11px 14px;
+.tabla-vertical-info td {
+  padding: 14px 24px;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.tabla-vertical-info tr:last-child th,
+.tabla-vertical-info tr:last-child td {
+  border-bottom: none;
+}
+
+.link-text {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.link-text:hover {
+  text-decoration: underline;
+}
+
+/* Tabla Horizontal Derecha (Productos) */
+.tabla-horizontal-data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.tabla-horizontal-data thead {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tabla-horizontal-data th {
+  padding: 12px 18px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  text-align: left;
+  letter-spacing: 0.03em;
+}
+
+.tabla-horizontal-data td {
+  padding: 14px 18px;
   border-bottom: 1px solid #f1f5f9;
   color: #334155;
 }
 
-.modal-tabla tbody tr:last-child td {
-  border-bottom: none;
+.tabla-horizontal-data tbody tr:hover {
+  background-color: #f8fafc;
 }
 
-.modal-tabla tbody tr:hover {
-  background-color: #fbfcfe;
-}
-
-.font-medium {
-  font-weight: 500;
-  color: #0f172a;
-}
-
-/* Alerta de error */
-.modal-alert-error {
-  padding: 10px 14px;
-  margin-bottom: 14px;
-  border-radius: 8px;
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
+.col-sku {
+  font-family: monospace;
+  color: #64748b;
   font-size: 0.8125rem;
 }
 
-/* Pie de acciones */
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  padding: 14px 24px;
-  border-top: 1px solid #f1f5f9;
-  background-color: #ffffff;
-}
-
-.btn-modal-cancel {
-  height: 38px;
-  padding: 0 20px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  background: #ffffff;
-  color: #475569;
+.col-precio {
   font-weight: 600;
-  font-size: 0.84rem;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  color: #0f172a;
 }
 
-.btn-modal-cancel:hover {
-  background-color: #f8fafc;
-  color: #1e293b;
-  border-color: #cbd5e1;
+.text-right {
+  text-align: right;
 }
 
-/* Responsive */
-@media (max-width: 520px) {
-  .detalle-info-grid {
+.font-bold {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Estado Vacío */
+.panel-empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #94a3b8;
+}
+
+.panel-empty-state svg {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  stroke: #cbd5e1;
+}
+
+.panel-empty-state p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Responsividad */
+@media (max-width: 980px) {
+  .detalle-layout-grid {
     grid-template-columns: 1fr;
-  }
-  .info-item.full-col {
-    grid-column: span 1;
   }
 }
