@@ -12,6 +12,7 @@ import Proveedores from './pages/Proveedores/Proveedores';
 import DetalleProveedor from './pages/Proveedores/DetalleProveedor'
 import EditarProveedor from './pages/Proveedores/EditarProveedor';
 import Productos from './pages/Productos/Productos';
+import DetalleProducto from './pages/Productos/DetalleProducto';
 
 export default function App() {
   return (
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="proveedores/detalles/:id" element={<DetalleProveedor />} />
             <Route path="proveedores/actualizar/:id" element={<EditarProveedor />} />
             <Route path="productos" element={<Productos />} />
+            <Route path="productos/detalles/:id" element={<DetalleProducto />} />
           </Route>
 
           {/* Redirección por defecto */}

@@ -5,11 +5,13 @@ import {
     cambiarEstadoProductoApi
 } from '../../api/producto.api';
 import { obtenerCategoriaApi } from '../../api/categoria.api';
+import ModalNuevoProducto from './CrearProducto';
 import PageHeader from '../../components/PageHeader';
 import StatCard from '../../components/StatCard';
 import FilterBar, { FilterSelect } from '../../components/FilterBar';
 import DataTable from '../../components/DataTable';
 import ConfirmModal from '../../components/ConfirmModal';
+import ModalListaCategorias from '../Categorias/Categorias';
 import '../../styles/Productos/Productos.css';
 
 export default function Productos() {
@@ -23,6 +25,7 @@ export default function Productos() {
     // Control de ventanas emergentes (Modales)
     const [modalNuevoAbierto, setModalNuevoAbierto] = useState(false);
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+    const [modalCategoriasAbierto, setModalCategoriasAbierto] = useState(false);
 
     // Estados de Filtros
     const [busqueda, setBusqueda] = useState('');
@@ -138,6 +141,29 @@ export default function Productos() {
         }
     };
 
+    const handleCategoriaActualizada = (categoriaActualizada) => {
+        setCategorias((prev) =>
+            prev.map((cat) => (cat.id === categoriaActualizada.id ? categoriaActualizada : cat))
+        );
+
+        setProductos((prev) =>
+            prev.map((prod) => {
+                const prodCatId = prod.categoria?.id || prod.categoria_id;
+                if (prodCatId === categoriaActualizada.id) {
+                    return {
+                        ...prod,
+                        categoria: {
+                            ...prod.categoria,
+                            id: categoriaActualizada.id,
+                            nombre: categoriaActualizada.nombre,
+                        },
+                    };
+                }
+                return prod;
+            })
+        );
+    };
+
     return (
         <div className="productos-page-container">
             {/* 1. Encabezado */}
@@ -210,6 +236,7 @@ export default function Productos() {
                 <StatCard
                     colorsubtext="purple"
                     color="purple"
+                    onClick={() => setModalCategoriasAbierto(true)}
                     titulo="Categorías"
                     valor={totalCategorias}
                     subtexto="En el sistema"
@@ -351,19 +378,6 @@ export default function Productos() {
                                             <circle cx="12" cy="12" r="3" />
                                         </svg>
                                     </button>
-
-                                    {/* Editar */}
-                                    <button
-                                        type="button"
-                                        className="btn-action-view"
-                                        title="Editar producto"
-                                        onClick={() => navigate(`/productos/actualizar/${item.id}`)}
-                                    >
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                        </svg>
-                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -376,8 +390,8 @@ export default function Productos() {
                 isOpen={productoSeleccionado !== null}
                 title={`¿Estás seguro de ${productoSeleccionado?.activo ? 'desactivar' : 'activar'} este producto?`}
                 description={`El producto "${productoSeleccionado?.nombre}" ${productoSeleccionado?.activo
-                        ? 'quedará marcado como inactivo en el catálogo.'
-                        : 'volverá a estar activo para registrar ventas y compras.'
+                    ? 'quedará marcado como inactivo en el catálogo.'
+                    : 'volverá a estar activo para registrar ventas y compras.'
                     }`}
                 confirmText={productoSeleccionado?.activo ? 'Sí, desactivar' : 'Sí, activar'}
                 cancelText="Cancelar"
@@ -389,6 +403,28 @@ export default function Productos() {
                     setProductoSeleccionado(null);
                 }}
                 onCancel={() => setProductoSeleccionado(null)}
+            />
+
+            {/* Modal flotante para crear un producto */}
+            <ModalNuevoProducto
+                isOpen={modalNuevoAbierto}
+                onClose={() => setModalNuevoAbierto(false)}
+                categorias={categorias}
+                onProductoCreado={(nuevoProducto) => {
+                    // Inserta el nuevo producto al principio de la tabla reactivamente
+                    setProductos((prev) => [nuevoProducto, ...prev]);
+                }}
+            />
+
+            <ModalListaCategorias
+                isOpen={modalCategoriasAbierto}
+                onClose={() => setModalCategoriasAbierto(false)}
+                categorias={categorias}
+                productos={productos}
+                onCategoriaCreada={(nuevaCat) => {
+                    setCategorias((prev) => [...prev, nuevaCat].sort((a, b) => a.id - b.id));
+                }}
+                onCategoriaActualizada={handleCategoriaActualizada}
             />
         </div>
     );

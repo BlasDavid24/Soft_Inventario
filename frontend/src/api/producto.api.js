@@ -6,7 +6,7 @@ export const obtenerCatalogoProductosApi = async () => {
 };
 
 export const obtenerProductoPorIdApi = async (id) => {
-  const respuesta = await api.get(`/productos/filtrar/${id}`);
+  const respuesta = await api.get(`/productos/filtrar ID/${id}`);
   return respuesta.data;
 };
 

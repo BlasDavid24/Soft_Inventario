@@ -135,3 +135,18 @@
   width: 14px;
   height: 14px;
 }
+
+.stat-card-clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+}
+
+.stat-card-clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card-clickable:active {
+  transform: translateY(0);
+}

@@ -1,0 +1,296 @@
+.detalle-producto-container {
+  max-width: 1200px;
+  box-sizing: border-box;
+
+}
+
+/* Mensajes de carga */
+.detalle-mensaje-estado {
+  padding: 40px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* Distribución de 2 columnas principales */
+.detalle-grid-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 24px;
+  padding-left: 10px;
+}
+
+.detalle-columna-izq,
+.detalle-columna-der {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Tarjeta contenedora de sección */
+.detalle-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  padding: 17px 24px;
+}
+
+/* Cabecera de la tarjeta */
+.detalle-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.detalle-card-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Círculos de ícono */
+.detalle-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detalle-card-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.detalle-card-icon.blue {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.detalle-card-icon.green {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+.detalle-card-icon.purple {
+  background-color: #f5f3ff;
+  color: #7c3aed;
+}
+
+.detalle-card-icon.gray {
+  background-color: #f8fafc;
+  color: #64748b;
+}
+
+/* Grilla de datos clave-valor */
+.detalle-datos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 20px;
+}
+
+.dato-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dato-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+
+.dato-valor {
+  font-size: 0.85rem;
+  color: #1e293b;
+}
+
+.dato-valor.font-mono {
+  font-family: monospace;
+}
+
+.precio-destacado {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.badge-plain {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+  background-color: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Sección de Estado */
+.estado-contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.estado-descripcion {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+/* Píldora de Categoría Morada */
+.categoria-tag-purple {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f3e8ff;
+  color: #9333ea;     
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.categoria-tag-icon {
+  width: 14px;
+  height: 14px;
+  stroke: #9333ea;
+  flex-shrink: 0;
+}
+
+/* Contenedor en grid de los recuadros de stock */
+.stock-boxes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Base de cada recuadro */
+.stock-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: transform 0.15s ease;
+}
+
+/* Recuadro Stock Actual: Naranja */
+.stock-box.orange {
+  background-color: #fff7ed; 
+  border-color: #fed7aa;   
+}
+
+.stock-box.orange .stock-box-label {
+  color: #c2410c;         
+}
+
+.stock-box.orange .stock-numero {
+  color: #ea580c;         
+}
+
+.stock-box.orange .stock-unidad {
+  color: #fb923c;
+}
+
+/* Recuadro Stock Mínimo: Rojo */
+.stock-box.red {
+  background-color: #fef2f2;
+  border-color: #fecaca;     
+}
+
+.stock-box.red .stock-box-label {
+  color: #b91c1c;     
+}
+
+.stock-box.red .stock-numero {
+  color: #dc2626;       
+}
+
+.stock-box.red .stock-unidad {
+  color: #f87171;
+}
+
+/* Tipografía dentro de los recuadros */
+.stock-box-label {
+  font-size: 0.70rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.stock-box-valor {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.stock-numero {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stock-unidad {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Responsivo en pantallas pequeñas */
+@media (max-width: 600px) {
+  .stock-boxes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Historial de Fechas */
+.detalle-fechas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fecha-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fecha-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.fecha-valor {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.fecha-divider {
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Responsivo en móviles */
+@media (max-width: 900px) {
+  .detalle-grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
