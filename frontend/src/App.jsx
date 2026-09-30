@@ -13,6 +13,8 @@ import DetalleProveedor from './pages/Proveedores/DetalleProveedor'
 import EditarProveedor from './pages/Proveedores/EditarProveedor';
 import Productos from './pages/Productos/Productos';
 import DetalleProducto from './pages/Productos/DetalleProducto';
+import Movimientos from './pages/Movimientos/Movimientos';
+import DetalleMovimiento from './pages/Movimientos/DetalleMovimiento';
 
 export default function App() {
   return (
@@ -42,14 +44,24 @@ export default function App() {
             }
           >
             <Route index element={<Dashboard />} />
+
+            {/*Modulo de Usuarios */}
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="usuarios/nuevo" element={<CrearUsuario />} />
             <Route path="usuarios/actualizar/:id" element={<EditarUsuario />} />
+
+            {/*Modulo de Proveedores */}
             <Route path="proveedores" element={<Proveedores />} />
             <Route path="proveedores/detalles/:id" element={<DetalleProveedor />} />
             <Route path="proveedores/actualizar/:id" element={<EditarProveedor />} />
+
+            {/*Modulo de Productos */}
             <Route path="productos" element={<Productos />} />
             <Route path="productos/detalles/:id" element={<DetalleProducto />} />
+
+            {/*Modulo de Movimientos */}
+            <Route path="movimientos" element={<Movimientos />} />
+            <Route path="movimientos/detalles/:id" element={<DetalleMovimiento />} />
           </Route>
 
           {/* Redirección por defecto */}

@@ -1,7 +1,7 @@
 from decimal import Decimal
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy import select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import joinedload
 from app.dependencies.auth import get_db, obtener_usuario_actual, requerir_rol
 from app.models.movimiento import Movimiento
 from app.models.detalle_movimiento import DetalleMovimiento
@@ -15,14 +15,18 @@ router = APIRouter(prefix="/movimientos", tags=["Movimiento"])
 # GET: Obtener lista de movimientos (con filtros opcionales por tipo)
 @router.get("/filtrar", response_model=list[MovimientoResponse])
 def obtener_movimientos(
-    tipo: str | None = Query(default=None, description="Filtrar por ENTRADA, " \
-    "SALIDA o DEVOLUCION CLIENTE - PROVEEDOR"),
+    tipo: str | None = Query(
+        default=None, 
+        description="Filtrar por ENTRADA, SALIDA o DEVOLUCION CLIENTE - PROVEEDOR"
+    ),
     db = Depends(get_db),
     usuario_actual: Usuario = Depends(obtener_usuario_actual),
 ):
     consulta = (
         select(Movimiento)
         .options(
+            joinedload(Movimiento.proveedor), 
+            joinedload(Movimiento.usuario), 
             joinedload(Movimiento.detalles).joinedload(DetalleMovimiento.producto)
         )
         .order_by(Movimiento.fecha.desc())
@@ -35,7 +39,7 @@ def obtener_movimientos(
     return resultado.scalars().unique().all()
 
 # GET: Obtener un movimiento por ID con sus detalles y productos
-@router.get("/filtrar ID/{movimiento_id}", response_model=MovimientoResponse)
+@router.get("/filtrar/{movimiento_id}", response_model=MovimientoResponse)
 def obtener_movimiento(
     movimiento_id: int, 
     db = Depends(get_db),
@@ -44,19 +48,22 @@ def obtener_movimiento(
     consulta = (
         select(Movimiento)
         .options(
+            joinedload(Movimiento.usuario),    # Precarga los datos del usuario
+            joinedload(Movimiento.proveedor),  # Precarga los datos del proveedor
             joinedload(Movimiento.detalles).joinedload(DetalleMovimiento.producto)
         )
         .where(Movimiento.id == movimiento_id)
     )
     resultado = db.execute(consulta)
-    movimiento = resultado.scalars().unique().scalar_one_or_none()
+    movimiento = resultado.scalars().unique().one_or_none()
 
     if movimiento is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Movimiento no encontrado"
+            detail=f"Movimiento con ID {movimiento_id} no encontrado"
         )
     
+    # 2. Retorno directo del objeto ORM
     return movimiento
 
 # POST: Crear un movimiento con sus detalles y actualizar stock

@@ -32,8 +32,6 @@ export default function Proveedores() {
   //Control de ventana emergente de desactivar/activar
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
 
-  //Estado en donde se consultara el detalle de cada proveedor
-  const [proveedorDetalle, setProveedorDetalle] = useState(null);
 
   // Carga paralela de información inicial
   useEffect(() => {
@@ -363,6 +361,7 @@ export default function Proveedores() {
           )}
         />
       )}
+      
       {/* Modal flotante de confirmación */}
       <ConfirmModal
         isOpen={proveedorSeleccionado !== null}

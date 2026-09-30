@@ -44,6 +44,11 @@
   border: 1px solid #fee2e2;
 }
 
+.stat-card-amber {
+  background: linear-gradient(135deg, #ffffff 40%, #edc1af 100%);
+  border: 1px solid #fee2e2;
+}
+
 /* Contenedor del icono circular */
 .stat-icon-wrapper {
   display: flex;
@@ -85,6 +90,12 @@
   background-color: #fee2e2;
   color: #ef4444;
 }
+
+.stat-icon-amber {
+  background-color: #fee2e2;
+  color: #c2410c;
+}
+
 /* Textos de la tarjeta */
 .stat-content {
   display: flex;
