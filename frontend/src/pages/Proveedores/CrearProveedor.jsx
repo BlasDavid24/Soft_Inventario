@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { crearProveedorApi } from '../../api/proveedor.api';
+import ConfirmModal from '../../components/ConfirmModal';
 import '../../styles/Proveedores/CrearProveedor.css';
 
 export default function ModalNuevoProveedor({ isOpen, onClose, onProveedorCreado }) {
@@ -14,6 +15,7 @@ export default function ModalNuevoProveedor({ isOpen, onClose, onProveedorCreado
   const [guardando, setGuardando] = useState(false);
   const [errorForm, setErrorForm] = useState('');
   const [exito, setExito] = useState(false);
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   if (!isOpen) return null;
 
@@ -35,7 +37,7 @@ export default function ModalNuevoProveedor({ isOpen, onClose, onProveedorCreado
       setGuardando(true);
       const nuevo = await crearProveedorApi(formData);
       onProveedorCreado(nuevo);
-      
+
       // Mostrar confirmación de éxito antes de cerrar
       setExito(true);
       setTimeout(() => {
@@ -184,7 +186,7 @@ export default function ModalNuevoProveedor({ isOpen, onClose, onProveedorCreado
             <button
               type="button"
               className="btn-modal-cancel"
-              onClick={handleCerrar}
+              onClick={() => setMostrarModal(true)}
               disabled={guardando || exito}
             >
               Cancelar
@@ -195,6 +197,20 @@ export default function ModalNuevoProveedor({ isOpen, onClose, onProveedorCreado
           </div>
         </form>
       </div>
+      {/* Modal flotante de confirmación */}
+      <ConfirmModal
+        isOpen={mostrarModal}
+        title="¿Estás seguro de regresar?"
+        description="Se perderán todos los datos ingresados en el formulario"
+        confirmText="Sí, salir"
+        cancelText="Continuar"
+        variant="danger"
+        onConfirm={() => {
+          setMostrarModal(false);
+          handleCerrar();
+        }}
+        onCancel={() => setMostrarModal(false)}
+      />
     </div>
   );
 }

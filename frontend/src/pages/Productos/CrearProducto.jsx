@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { crearProductoApi } from '../../api/producto.api';
 import ConfirmModal from '../../components/ConfirmModal';
 import '../../styles/Productos/CrearProducto.css';
@@ -25,6 +25,16 @@ export default function ModalNuevoProducto({
     const [exito, setExito] = useState(false);
     const [mostrarModal, setMostrarModal] = useState(false);
 
+    //Limpieza de estados cada vez que se abre o cierra el modal
+    useEffect(() => {
+        if (isOpen) {
+            setFormData(initialFormState);
+            setExito(false);
+            setError('');
+        }
+    }, [isOpen]);
+
+    
     if (!isOpen) return null;
 
     const handleChange = (e) => {
@@ -39,11 +49,14 @@ export default function ModalNuevoProducto({
         if (guardando) return;
         setFormData(initialFormState);
         setError('');
+        setExito(false);
         onClose();
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (guardando) return;
+
         setGuardando(true);
         setError('');
 
@@ -54,7 +67,6 @@ export default function ModalNuevoProducto({
             return;
         }
 
-        // Payload exacto según el esquema de FastAPI
         const payload = {
             nombre: formData.nombre.trim(),
             sku: formData.sku.trim(),
@@ -122,7 +134,7 @@ export default function ModalNuevoProducto({
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12" />
                         </svg>
-                        <span>¡Proveedor creado exitosamente!</span>
+                        <span>Producto creado exitosamente!</span>
                     </div>
                 )}
 
@@ -242,7 +254,6 @@ export default function ModalNuevoProducto({
                                 disabled={guardando}
                             />
                         </div>
-
                     </div>
 
                     {/* Acciones */}
@@ -291,13 +302,13 @@ export default function ModalNuevoProducto({
             <ConfirmModal
                 isOpen={mostrarModal}
                 title="¿Estás seguro de regresar?"
-                description="Se perderán todos los datos ingresados en el formulario y regresarás al listado de productos"
+                description="Se perderán todos los datos ingresados en el formulario"
                 confirmText="Sí, salir"
                 cancelText="Continuar"
                 variant="danger"
                 onConfirm={() => {
                     setMostrarModal(false);
-                    handleCerrar()
+                    handleCerrar();
                 }}
                 onCancel={() => setMostrarModal(false)}
             />

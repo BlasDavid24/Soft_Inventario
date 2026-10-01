@@ -16,6 +16,7 @@ import DetalleProducto from './pages/Productos/DetalleProducto';
 import Movimientos from './pages/Movimientos/Movimientos';
 import DetalleMovimiento from './pages/Movimientos/DetalleMovimiento';
 import CrearMovimiento from './pages/Movimientos/CrearMovimiento';
+import InventarioValorizado from './pages/Reportes/InventarioValorizado';
 
 export default function App() {
   return (
@@ -64,7 +65,12 @@ export default function App() {
             <Route path="movimientos" element={<Movimientos />} />
             <Route path="movimientos/detalles/:id" element={<DetalleMovimiento />} />
             <Route path="/movimientos/nuevo" element={<CrearMovimiento />} />
+
+            {/*Modulo de Reportes */}
+            <Route path="/reportes" element={<InventarioValorizado />} />
           </Route>
+
+
 
           {/* Redirección por defecto */}
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -4,8 +4,10 @@ import PageHeader from '../../components/PageHeader';
 import { obtenerProveedoresApi } from '../../api/proveedor.api';
 import { obtenerCatalogoProductosApi } from '../../api/producto.api';
 import { crearMovimientoApi } from '../../api/movimiento.api';
+import ModalNuevoProveedor from '../Proveedores/CrearProveedor';
+import ModalNuevoProducto from '../Productos/CrearProducto';
+import { obtenerCategoriaApi } from '../../api/categoria.api';
 import '../../styles/Movimientos/CrearMovimiento.css';
-
 export default function CrearMovimiento() {
     const navigate = useNavigate();
 
@@ -33,7 +35,9 @@ export default function CrearMovimiento() {
 
     // Listas de datos maestros desde el backend
     const [proveedores, setProveedores] = useState([]);
+    const [categorias, setCategorias] = useState([]);
     const [productosDisponibles, setProductosDisponibles] = useState([]);
+
 
     //Estados de la búsqueda y agregador de productos
     const [busquedaProducto, setBusquedaProducto] = useState('');
@@ -42,15 +46,18 @@ export default function CrearMovimiento() {
     const [cantidadInput, setCantidadInput] = useState(1);
     const [costoUnitarioInput, setCostoUnitarioInput] = useState('');
     const dropdownRef = useRef(null);
+    
 
     //Lista de productos añadidos al movimiento
     const [productosMovimiento, setProductosMovimiento] = useState([]);
     const [guardando, setGuardando] = useState(false);
     const [errorValidacion, setErrorValidacion] = useState('');
 
-    // 1. Agrega este estado arriba con tus otros useState:
+
     const [tipoDropdownAbierto, setTipoDropdownAbierto] = useState(false);
     const [mensajeExito, setMensajeExito] = useState('');
+    const [modalNuevoProveedor, setModalNuevoProveedor] = useState(false);
+    const [modalNuevoProducto, setModalNuevoProducto] = useState(false);
 
     // 2. Configuración de opciones con iconos y colores dinámicos:
     const OPCIONES_TIPO = [
@@ -117,15 +124,19 @@ export default function CrearMovimiento() {
     useEffect(() => {
         const cargarCatalogos = async () => {
             try {
-                const [dataProv, dataProd] = await Promise.all([
+                const [dataProv, dataProd, dataCat] = await Promise.all([
                     obtenerProveedoresApi().catch(() => []),
                     obtenerCatalogoProductosApi().catch(() => []),
+                    obtenerCategoriaApi().catch(() => []),
+                    
                 ]);
 
                 const listaProveedores = Array.isArray(dataProv) ? dataProv : (dataProv?.data || []);
                 setProveedores(listaProveedores);
                 const listaProductos = Array.isArray(dataProd) ? dataProd : (dataProd?.data || []);
                 setProductosDisponibles(listaProductos);
+                const listaCategorias = Array.isArray(dataCat) ? dataCat : (dataCat?.data || []); 
+                setCategorias(listaCategorias);
             } catch (err) {
                 console.error('Error al cargar catálogos:', err);
             }
@@ -438,7 +449,7 @@ export default function CrearMovimiento() {
                                     <button
                                         type="button"
                                         className="btn-nuevo-proveedor"
-                                        onClick={() => navigate('/proveedores')}
+                                        onClick={() => setModalNuevoProveedor(true)}
                                     >
                                         + Nuevo Proveedor
                                     </button>
@@ -594,7 +605,7 @@ export default function CrearMovimiento() {
                                     <button
                                         type="button"
                                         className="btn-crear-prod-outline"
-                                        onClick={() => navigate('/productos')}
+                                        onClick={() => setModalNuevoProducto(true)}
                                     >
                                         + Crear Producto
                                     </button>
@@ -856,6 +867,25 @@ export default function CrearMovimiento() {
 
             {mensajeExito && <div className="alerta-success">{mensajeExito}</div>}
             {errorValidacion && <div className="alerta-error-box">{errorValidacion}</div>}
+
+            <ModalNuevoProveedor
+                isOpen={modalNuevoProveedor}
+                onClose={() => setModalNuevoProveedor(false)}
+                onProveedorCreado={(nuevoProveedor) => {
+                    setProveedores((prev) => [nuevoProveedor, ...prev]);
+                }}
+            />
+
+            <ModalNuevoProducto 
+                isOpen={modalNuevoProducto}
+                onClose={() => setModalNuevoProducto(false)}
+                categorias={categorias}
+                onProductoCreado={(nuevoProducto) => {
+                    // Inserta el nuevo producto al principio de la tabla reactivamente
+                    setProductosDisponibles((prev) => [nuevoProducto, ...prev]);
+                }}
+            />
+
         </div>
     );
 }

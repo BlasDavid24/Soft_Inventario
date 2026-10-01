@@ -1,0 +1,124 @@
+.reporte-page {
+  background-color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.reporte-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.btn-exportar-excel {
+  height: 42px;
+  padding: 0 18px;
+  background-color: #10b981;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+  transition: all 0.2s ease;
+}
+
+.btn-exportar-excel:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.btn-exportar-excel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-exportar-excel svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Tarjetas Resumen */
+.reporte-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* Barra de Filtros */
+.reporte-filtros-bar {
+  padding: 18px 24px;
+}
+
+.filtros-grid {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.filtro-campo {
+  flex: 1;
+  min-width: 180px;
+}
+
+.filtro-campo.flex-2 {
+  flex: 2;
+  min-width: 250px;
+}
+
+/* Tabla del reporte */
+.tabla-reporte-card {
+  padding: 20px;
+}
+
+.badge-estado-optimo {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.fila-total-consolidado {
+  background-color: #f8fafc;
+  border-top: 2px solid #cbd5e1;
+}
+
+.fila-total-consolidado td {
+  padding: 14px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .reporte-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filtros-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtro-campo,
+  .filtro-campo.flex-2 {
+    width: 100%;
+  }
+
+  .btn-exportar-excel {
+    width: 100%;
+    justify-content: center;
+  }
+}

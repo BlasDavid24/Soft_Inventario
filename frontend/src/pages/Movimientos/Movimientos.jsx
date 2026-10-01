@@ -25,7 +25,7 @@ export default function Movimientos() {
       setError('');
       try {
         const data = await obtenerMovimientosApi();
-        setMovimientos(Array.isArray(data) ? data : []);
+        setMovimientos(Array.isArray(data) ? data : (data?.data || []));
       } catch (err) {
         console.error('Error al cargar movimientos:', err);
         setError('No se pudo cargar la lista de movimientos.');
@@ -96,6 +96,40 @@ export default function Movimientos() {
     });
   }, [movimientos, busqueda, filtroTipo]);
 
+  // Exportar los datos filtrados a Excel (.csv compatible con UTF-8)
+  const exportarAExcel = () => {
+    if (movimientosFiltrados.length === 0) return;
+
+    const encabezados = ['ID Mov.', 'Fecha', 'Tipo', 'Proveedor', 'Usuario', 'Motivo', 'Costo Total ($)'];
+
+    const filas = movimientosFiltrados.map((m) => {
+      const prov = m.proveedor?.nombre || (typeof m.proveedor === 'string' ? m.proveedor : '—');
+      const usr = m.usuario?.nombre || m.usuario?.username || 'Sistema';
+      const motivo = m.motivo || 'Sin motivo';
+      const costo = Number(m.costo_total || 0);
+
+      return [
+        m.id,
+        `"${formatearFecha(m.fecha || m.created_at)}"`,
+        `"${m.tipo || ''}"`,
+        `"${prov.replace(/"/g, '""')}"`,
+        `"${usr.replace(/"/g, '""')}"`,
+        `"${motivo.replace(/"/g, '""')}"`,
+        costo,
+      ].join(';');
+    });
+
+    const contenidoCSV = '\uFEFF' + [encabezados.join(';'), ...filas].join('\r\n');
+    const blob = new Blob([contenidoCSV], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Movimientos_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Paginación en memoria
   const totalItems = movimientosFiltrados.length;
   const totalPaginas = Math.ceil(totalItems / filasPorPagina) || 1;
@@ -126,7 +160,7 @@ export default function Movimientos() {
     (m) => (m.tipo || '').toUpperCase() === 'DEVOLUCION PROVEEDOR'
   ).length;
 
-  // 1. Columnas actualizadas
+  // Columnas
   const columnas = [
     { label: 'ID' },
     { label: 'FECHA' },
@@ -137,7 +171,7 @@ export default function Movimientos() {
     { label: 'ACCIONES', align: 'right' },
   ];
 
-  // 2. Renderizado de cada fila con el botón de ojo
+  // Renderizado de fila
   const renderFila = (mov) => {
     const tipoMayus = (mov.tipo || '').toUpperCase();
     let badgeClass = '';
@@ -157,32 +191,23 @@ export default function Movimientos() {
       label = '↪ Dev. Proveedor';
     } else if (tipoMayus === 'AJUSTE') {
       badgeClass = 'badge-tipo-ajuste';
-      label = ' <-> AJUSTE'
+      label = ' <-> AJUSTE';
     }
 
     return (
       <tr key={mov.id} className="movimiento-fila">
-        {/* ID */}
         <td className="mov-td-id">
           <span className="mov-id-badge">#{mov.id}</span>
         </td>
-
-        {/* FECHA */}
         <td className="mov-td-fecha">
           {formatearFecha(mov.fecha || mov.created_at)}
         </td>
-
-        {/* TIPO */}
         <td>
           <span className={`badge-tipo ${badgeClass}`}>{label}</span>
         </td>
-
-        {/* PROVEEDOR */}
         <td className="mov-td-proveedor">
           {mov.proveedor?.nombre || <span className="mov-texto-vacio">—</span>}
         </td>
-
-        {/* USUARIO */}
         <td className="mov-td-usuario">
           <div className="mov-user-pill">
             <svg
@@ -199,13 +224,9 @@ export default function Movimientos() {
             <span>{mov.usuario?.nombre || mov.usuario?.username || 'Sistema'}</span>
           </div>
         </td>
-
-
         <td className="text-right mov-td-costo">
           {formatearPrecio(mov.costo_total)}
         </td>
-
-
         <td className="text-right mov-td-acciones">
           <button
             type="button"
@@ -233,7 +254,7 @@ export default function Movimientos() {
 
   return (
     <div className="movimientos-container">
-      {/* Encabezado */}
+      {/* Encabezado con ambos botones de acción */}
       <PageHeader
         titulo="Movimientos"
         subtitulo="Administra y consulta los movimientos de inventario del sistema."
@@ -253,25 +274,46 @@ export default function Movimientos() {
           </svg>
         }
       >
-        <button
-          className="btn-primary"
-          type="button"
-          onClick={() => navigate('/movimientos/nuevo')}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="btn-icon-plus"
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          {/* Botón Exportar a Excel */}
+          <button
+            type="button"
+            className="btn-exportar-excel"
+            onClick={exportarAExcel}
+            disabled={cargando || movimientosFiltrados.length === 0}
+            title="Exportar registros filtrados a formato Excel / CSV"
           >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          <span>Nuevo Movimiento</span>
-        </button>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            <span>Exportar Excel</span>
+          </button>
+
+          {/* Botón Nuevo Movimiento */}
+          <button
+            className="btn-primary"
+            type="button"
+            onClick={() => navigate('/movimientos/nuevo')}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="btn-icon-plus"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>Nuevo Movimiento</span>
+          </button>
+        </div>
       </PageHeader>
 
       {/* Tarjetas de Estadísticas */}
@@ -280,7 +322,7 @@ export default function Movimientos() {
           titulo="Entradas"
           valor={totalEntradas}
           color="blue"
-          colorsubtext="blue"
+          colorsubtext="defect"
           icono={
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 19V5M5 12l7-7 7 7" />

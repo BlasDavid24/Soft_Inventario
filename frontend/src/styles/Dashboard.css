@@ -1,0 +1,227 @@
+.dashboard-page {
+  background-color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.dashboard-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Acciones superiores */
+.dashboard-top-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-dash-primary {
+  height: 42px;
+  padding: 0 18px;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-dash-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-dash-primary svg,
+.btn-dash-disabled svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-dash-outline {
+  height: 42px;
+  padding: 0 16px;
+  background-color: #ffffff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-dash-outline:hover {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+}
+
+/* Botón Inhabilitado de Reporte */
+.btn-dash-disabled {
+  height: 42px;
+  padding: 0 16px;
+  background-color: #f1f5f9;
+  color: #94a3b8;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Cuadrícula de KPIs */
+.dashboard-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+/* Grilla de dos paneles principales */
+.dashboard-content-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.dash-card {
+  padding: 22px;
+}
+
+.header-icon-box.red-light {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+/* Badges de Estado de Stock */
+.badge-estado-agotado {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.badge-estado-bajo {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+/* Lista de Actividad Reciente */
+.dash-lista-movimientos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dash-mov-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  background-color: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.dash-mov-item:hover {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.dash-mov-info-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.dash-badge-mini {
+  padding: 4px 10px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  white-space: nowrap;
+}
+
+.dash-mov-textos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dash-mov-motivo {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dash-mov-fecha {
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+.dash-mov-cant {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #3b82f6;
+  white-space: nowrap;
+}
+
+/* ==========================================================
+   RESPONSIVE DEL DASHBOARD
+   ========================================================== */
+@media (max-width: 1200px) {
+  .dashboard-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .dashboard-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-top-actions {
+    width: 100%;
+  }
+
+  .btn-dash-primary,
+  .btn-dash-outline,
+  .btn-dash-disabled {
+    width: 100%;
+    justify-content: center;
+  }
+}
