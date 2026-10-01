@@ -140,8 +140,8 @@ export default function Movimientos() {
   // 2. Renderizado de cada fila con el botón de ojo
   const renderFila = (mov) => {
     const tipoMayus = (mov.tipo || '').toUpperCase();
-    let badgeClass = 'badge-tipo-ajuste';
-    let label = mov.tipo || 'Ajuste';
+    let badgeClass = '';
+    let label = mov.tipo;
 
     if (tipoMayus === 'ENTRADA') {
       badgeClass = 'badge-tipo-entrada';
@@ -155,6 +155,9 @@ export default function Movimientos() {
     } else if (tipoMayus === 'DEVOLUCION PROVEEDOR') {
       badgeClass = 'badge-tipo-dev-proveedor';
       label = '↪ Dev. Proveedor';
+    } else if (tipoMayus === 'AJUSTE') {
+      badgeClass = 'badge-tipo-ajuste';
+      label = ' <-> AJUSTE'
     }
 
     return (
@@ -197,12 +200,12 @@ export default function Movimientos() {
           </div>
         </td>
 
-        {/* COSTO TOTAL (en reemplazo de motivo) */}
+
         <td className="text-right mov-td-costo">
           {formatearPrecio(mov.costo_total)}
         </td>
 
-        {/* ACCIONES (Ícono de Ojo para Detalles) */}
+
         <td className="text-right mov-td-acciones">
           <button
             type="button"
@@ -253,7 +256,7 @@ export default function Movimientos() {
         <button
           className="btn-primary"
           type="button"
-          onClick={() => setModalNuevoAbierto(true)}
+          onClick={() => navigate('/movimientos/nuevo')}
         >
           <svg
             viewBox="0 0 24 24"

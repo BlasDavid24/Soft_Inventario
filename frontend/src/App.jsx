@@ -15,6 +15,7 @@ import Productos from './pages/Productos/Productos';
 import DetalleProducto from './pages/Productos/DetalleProducto';
 import Movimientos from './pages/Movimientos/Movimientos';
 import DetalleMovimiento from './pages/Movimientos/DetalleMovimiento';
+import CrearMovimiento from './pages/Movimientos/CrearMovimiento';
 
 export default function App() {
   return (
@@ -62,6 +63,7 @@ export default function App() {
             {/*Modulo de Movimientos */}
             <Route path="movimientos" element={<Movimientos />} />
             <Route path="movimientos/detalles/:id" element={<DetalleMovimiento />} />
+            <Route path="/movimientos/nuevo" element={<CrearMovimiento />} />
           </Route>
 
           {/* Redirección por defecto */}

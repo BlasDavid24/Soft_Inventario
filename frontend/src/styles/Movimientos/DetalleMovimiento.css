@@ -278,7 +278,7 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  margin: 0 10px 0 10px;
+  margin: 0 10px 10px 10px;
 }
 
 .productos-card-header {
@@ -362,12 +362,14 @@
   font-family: monospace;
   font-size: 0.8rem;
   color: #64748b;
+  text-align: center;
 }
 
 .td-unidad {
   font-size: 0.78rem;
   font-weight: 600;
   color: #64748b;
+  text-align: center;
 }
 
 .producto-info-cell {
@@ -403,6 +405,7 @@
 .prod-nombre-text {
   font-weight: 600;
   color: #0f172a;
+  text-align: center;
 }
 
 .productos-vacio {

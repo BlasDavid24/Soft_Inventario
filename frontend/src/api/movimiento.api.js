@@ -9,3 +9,8 @@ export const obtenerMovimientoPorIdApi = async (id) => {
   const response = await api.get(`/movimientos/filtrar/${id}`);
   return response.data;
 };
+
+export const crearMovimientoApi = async (datosMovimientos) => {
+  const respuesta = await api.post('/movimientos/crear', datosMovimientos);
+  return respuesta.data;
+};
